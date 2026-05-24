@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 
 const app = express();
@@ -10,10 +9,14 @@ const PORT = 3000;
 // Path to database
 const DB_PATH = path.join(process.cwd(), "src", "data", "db.json");
 
-// Ensure directory exists
+// Ensure directory exists safely (prevents EROFS crashes on Vercel)
 const dbDir = path.dirname(DB_PATH);
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+try {
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+} catch (err) {
+  console.warn("Could not create database directory in read-only environment:", err);
 }
 
 // Initial Data
@@ -91,14 +94,22 @@ function loadDB() {
   } catch (err) {
     console.error("Failed to parse db.json, resetting to initial:", err);
   }
-  // If not exists or error, save and return INITIAL_DATA
-  fs.writeFileSync(DB_PATH, JSON.stringify(INITIAL_DATA, null, 2), "utf8");
+  // If not exists or error, save and return INITIAL_DATA safely
+  try {
+    fs.writeFileSync(DB_PATH, JSON.stringify(INITIAL_DATA, null, 2), "utf8");
+  } catch (err) {
+    console.warn("Could not write initial database on read-only system:", err);
+  }
   return INITIAL_DATA;
 }
 
 // Helper to save db
 function saveDB(data: any) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf8");
+  try {
+    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf8");
+  } catch (err) {
+    console.warn("Writing to read-only filesystem ignored in serverless deployment:", err);
+  }
 }
 
 // Load current DB state
@@ -321,6 +332,7 @@ I encountered an error trying to contact the AI model. Let's direct our action. 
 // Vite middleware and file server setup
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
+    const { createServer as createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
