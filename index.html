@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4J's Educational Academy LMS (Django & Vanilla JS)</title>
+  </head>
+  <body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen selection:bg-amber-500/20 selection:text-amber-950 font-sans">
+    
+    <!-- 
+      DJ-VARS: Mimics a Django template output structure with clean server properties
+      {% block menu %}
+    -->
+    <header id="app-main-header" class="bg-white border-b-2 border-amber-400 sticky top-0 z-50 shadow-sm px-6 py-3">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        
+        <!-- Brand identity -->
+        <div class="flex items-center gap-3">
+          <!-- majestic royal crown laurel crest -->
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 to-amber-700 flex items-center justify-center shadow-inner text-white shrink-0">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3 6 6 1-4.5 4.5 1 6.5-5.5-3.5-5.5 3.5 1-6.5L3 9l6-1z" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-serif font-black text-amber-800 text-lg tracking-wider">4J's</span>
+              <span class="font-serif font-normal text-[#927116] text-[15px] tracking-widest uppercase">Educational Academy</span>
+            </div>
+            <p class="text-[10px] text-amber-600/80 tracking-[0.25em] uppercase font-bold text-center md:text-left">
+              Learning Management System
+            </p>
+          </div>
+        </div>
+
+        <!-- UK London Live Clock -->
+        <div class="flex items-center gap-2.5 bg-amber-500/5 px-4 py-2 rounded-xl border border-amber-200/50">
+          <svg class="w-4 h-4 text-amber-600 animate-spin" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-linecap="round"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <div class="text-left font-mono">
+            <div class="text-xs font-bold text-amber-950 tracking-wide flex items-center gap-1">
+              <span>London UK: </span>
+              <span id="live-uk-time" class="text-[#9C7507]">19:15:26</span>
+            </div>
+            <div id="live-uk-date" class="text-[9px] text-gray-500 uppercase tracking-widest font-semibold">
+              Thursday • 21 May 2026
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab switches & Authenticated switchboards -->
+        <div class="flex items-center gap-2">
+          <button id="btn-tab-public" class="px-3 py-1.5 rounded-lg text-xs font-serif font-bold uppercase transition bg-amber-600 text-white shadow">
+            Public Home
+          </button>
+          
+          <button id="btn-tab-trainer" class="px-3 py-1.5 rounded-lg text-xs font-serif font-bold uppercase transition text-gray-600 hover:bg-gray-100 hidden">
+            Teacher Space <span id="trainer-name-nav" class="font-sans font-normal">()</span>
+          </button>
+
+          <button id="btn-tab-admin" class="px-3 py-1.5 rounded-lg text-xs font-serif font-bold uppercase transition text-gray-600 hover:bg-gray-100 hidden">
+            Admin Console 👑
+          </button>
+
+          <button id="btn-logout" class="p-1.5 bg-red-50 hover:bg-red-100 rounded-lg text-red-600 transition hidden" title="Logout of Secure Portal">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </header>
+    <!-- {% endblock %} -->
+
+    <!-- 
+      MAIN ROUTER BLOCKS 
+      {% block content %}
+    -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+      <!-- ================== SECTION: GUEST PUBLIC WORKSPACE ================== -->
+      <section id="guest-view-workspace" class="space-y-6 block">
+        
+        <!-- Tab Subnavigation inside Public Page -->
+        <div class="flex border-b border-gray-200">
+          <button id="btn-sub-landing" class="py-2 px-4 font-serif font-bold uppercase text-xs tracking-wider border-b-2 border-amber-600 text-amber-900 transition">
+            🎓 Academy Landing Hub
+          </button>
+          <button id="btn-sub-resources" class="py-2 px-4 font-serif font-bold uppercase text-xs tracking-wider border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition">
+            📂 Drive Resource Folders
+          </button>
+          <button id="btn-sub-purifier" class="py-2 px-4 font-serif font-bold uppercase text-xs tracking-wider border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition">
+            ✨ Watermark Purifier Tool
+          </button>
+        </div>
+
+        <!-- SUB TAB: LANDING HUB -->
+        <div id="panel-guest-landing" class="space-y-6 block">
+          
+          <!-- Large Majestic Banner -->
+          <div class="bg-white border-2 border-amber-300 rounded-3xl p-6 md:p-8 shadow-sm text-center relative overflow-hidden flex flex-col items-center">
+            
+            <!-- Logo display -->
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-9 h-9 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3 6 6 1-4.5 4.5 1 6.5-5.5-3.5-5.5 3.5 1-6.5L3 9l6-1z" />
+              </svg>
+              <div class="text-left leading-none">
+                <span class="block font-serif font-black text-amber-950 text-xl tracking-wide">4J's</span>
+                <span class="block font-mono text-[8px] text-amber-600 font-bold uppercase">Learning Management System</span>
+              </div>
+            </div>
+
+            <h1 class="text-xl md:text-2xl font-serif text-amber-950 font-extrabold max-w-2xl mt-4 tracking-tight">
+              Academy Core LMS & Unified UK Board Syllabus Center
+            </h1>
+
+            <p id="landing-about-text" class="text-xs text-gray-600 max-w-3xl mt-3 leading-relaxed">
+              Welcome to 4J's Educational Academy. We are structured to offer absolute dedication in high-standard tuition, specializing in the UK National Curriculum boards including GCSE, Edexcel, AQA, and OCR. Utilizing fully tested syllabus tracking guides alongside top-tier curated resources, our experienced trainers ensure that Year 3 to Year 13 students reach maximum academic heights.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6 w-full max-w-2xl pt-6 border-t border-gray-100">
+              <div class="text-center p-3.5 bg-amber-500/5 border border-amber-200/50 rounded-xl">
+                <span class="block font-serif text-lg font-bold text-amber-950" id="stat-trainers-count">3</span>
+                <span class="text-[10px] uppercase font-semibold text-gray-500">Expert Instructors</span>
+              </div>
+              <div class="text-center p-3.5 bg-amber-500/5 border border-amber-200/50 rounded-xl">
+                <span class="block font-serif text-lg font-bold text-amber-950" id="stat-students-count">148</span>
+                <span class="text-[10px] uppercase font-semibold text-gray-500">Active Registrar Students</span>
+              </div>
+              <div class="text-center p-3.5 bg-amber-500/5 border border-amber-200/50 rounded-xl">
+                <span class="block font-serif text-lg font-bold text-amber-950" id="stat-batches-count">13</span>
+                <span class="text-[10px] uppercase font-semibold text-gray-500">Weekly Scheduled Batches</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Weekly Schedule Tracker Grid -->
+          <div class="bg-white border border-amber-200 rounded-2xl p-6 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 pb-4 mb-4 gap-4">
+              <div>
+                <h3 class="text-sm font-bold font-serif uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block animate-ping"></span>
+                  Active UK Board Classes Radar
+                </h3>
+                <p class="text-xs text-gray-500 mt-1">
+                  Showcasing real-time live runs for Year 4 to Year 12 relative to current UK GMT clock.
+                </p>
+              </div>
+              <div class="flex items-center gap-1 text-[10px] px-2.5 py-1 bg-amber-100 text-amber-800 rounded font-semibold uppercase tracking-wider">
+                Today is: <span id="radar-day-label" class="font-bold">Thursday</span>
+              </div>
+            </div>
+
+            <!-- Dynamic schedule cards -->
+            <div id="radar-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Bottom Action invitation block -->
+          <div class="bg-[#1C1A16] text-white rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h3 class="text-lg font-serif font-bold text-amber-400">Looking for Revision Handouts?</h3>
+              <p class="text-xs text-stone-300 mt-1 max-w-xl">
+                Our collaborative Google Drive folders house exam-matched worksheets sorted by academic year levels and week cycles. Get instant direct access inside the resources tab.
+              </p>
+            </div>
+            <button id="btn-jump-resources" class="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-[#D4AF37] hover:from-amber-500 hover:to-amber-600 text-amber-950 font-bold text-xs uppercase rounded-xl transition shadow active:scale-95 cursor-pointer">
+              Browse Resources Folders
+            </button>
+          </div>
+
+        </div>
+
+        <!-- SUB TAB: DRIVE RESOURCE FOLDER PANEL -->
+        <div id="panel-guest-resources" class="space-y-6 hidden">
+          
+          <div class="bg-gradient-to-br from-amber-50 to-white border border-amber-200 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <span class="text-[10px] uppercase font-bold text-amber-700 font-mono tracking-widest bg-amber-100/60 px-2 py-0.5 rounded-full inline-block mb-1.5">
+                RESOURCE RECONCILER
+              </span>
+              <h2 class="text-lg font-serif text-amber-950 font-bold">Syllabus Trackers & Google Drive Resources</h2>
+              <p class="text-xs text-gray-600 mt-1 max-w-xl">
+                This environment cross-references live syllabus metrics with shared directories. Search lessons, find week cycles, and get purified revision papers. 
+              </p>
+            </div>
+            <button id="btn-download-all-zip" class="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 active:scale-95 text-white font-semibold text-xs rounded-xl shadow cursor-pointer transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Download Complete Handout ZIP
+            </button>
+          </div>
+
+          <!-- Dynamic Resource Filters -->
+          <div class="flex flex-col md:flex-row gap-3 pt-2">
+            <div class="flex-1 relative">
+              <input id="res-search-input" type="text" placeholder="Search resources, SUVAT guidelines, digestive matrices..." class="w-full text-xs pl-3 pr-4 py-2.5 bg-white border border-gray-300 focus:border-amber-500 focus:outline-none rounded-xl" />
+            </div>
+
+            <!-- Year Dropdown -->
+            <div class="flex items-center gap-1.5 min-w-[140px] bg-white px-3 py-1 border border-gray-300 rounded-xl">
+              <label class="text-[9px] font-bold text-amber-800 uppercase tracking-wider font-serif">Year:</label>
+              <select id="filter-year" class="text-xs font-semibold bg-transparent text-gray-700 focus:outline-none w-full cursor-pointer">
+                <option value="All">All Years</option>
+                <option value="Year 4">Year 4</option>
+                <option value="Year 7">Year 7</option>
+                <option value="Year 8">Year 8</option>
+                <option value="Year 12">Year 12</option>
+              </select>
+            </div>
+
+            <!-- Subject Dropdown -->
+            <div class="flex items-center gap-1.5 min-w-[150px] bg-white px-3 py-1 border border-gray-300 rounded-xl">
+              <label class="text-[9px] font-bold text-amber-800 uppercase tracking-wider font-serif">Subject:</label>
+              <select id="filter-subject" class="text-xs font-semibold bg-transparent text-gray-700 focus:outline-none w-full cursor-pointer">
+                <option value="All">All Subjects</option>
+                <option value="Maths">Maths</option>
+                <option value="Biology">Biology</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="English">English</option>
+                <option value="Mechanics Maths">Mechanics Maths</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Grid displays of resources -->
+          <div id="resources-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamic list cards -->
+          </div>
+
+          <!-- Syllabus Sheet Reference Tracker table replicating Django block -->
+          <div class="bg-white border border-amber-200 rounded-2xl p-6 shadow-sm overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b border-gray-150 pb-3">
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+                <h3 class="font-serif font-bold text-amber-950 text-sm">
+                  Syllabus Progress Tracker (UK Exam Boards)
+                </h3>
+              </div>
+              <span class="text-[10px] text-gray-500 font-mono">Status Board: ACTIVE</span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-gray-200 text-amber-900 font-serif">
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Board</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Year Level</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Subject</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Module Topic</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Topic Milestones</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Instruction Status</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Instructor</th>
+                  </tr>
+                </thead>
+                <tbody id="syllabus-table-rows">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SUB TAB: DOCUMENT WATERMARK PURIFIER -->
+        <div id="panel-guest-purifier" class="space-y-6 hidden">
+          <div class="grid grid-cols-1 xl:grid-cols-5 gap-6">
+            
+            <!-- File uploading block on the left -->
+            <div class="xl:col-span-2 bg-white border border-amber-200 shadow-sm p-6 rounded-2xl flex flex-col justify-between">
+              <div>
+                <h2 class="text-lg font-serif text-amber-950 font-bold flex items-center gap-1.5">
+                  <svg class="w-5 h-5 text-amber-500 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+                  4J Document Purifier
+                </h2>
+                <p class="text-xs text-gray-500 mt-1 pb-4 border-b border-gray-100">
+                  Instantly purge background watermarks or external header logos from educational handouts, adding 4J's gold crest badge watermark in their place.
+                </p>
+
+                <div class="mt-4 space-y-4">
+                  <div>
+                    <label class="block text-[10px] font-bold uppercase text-amber-900 font-serif tracking-wider mb-1.5">
+                      Target Watermark Signature text to erase
+                    </label>
+                    <input id="purifier-target-phrase" type="text" value="Theos Educational Academy" class="w-full text-xs px-3 py-2 bg-gray-50 border border-gray-300 focus:border-amber-500 focus:bg-white rounded-lg focus:outline-none font-medium" />
+                    <span class="text-[9px] text-gray-400 mt-1 block">Specify the keyword matching the company logo or copyright notice overlay to target clean.</span>
+                  </div>
+
+                  <!-- Drop zone -->
+                  <div id="purifier-drop-zone" class="border-2 border-dashed border-amber-200/80 hover:border-amber-400 hover:bg-amber-500/5 py-12 px-4 rounded-xl text-center cursor-pointer transition relative">
+                    <input type="file" id="purifier-file-input" class="hidden" accept=".pdf,.docx,.pptx" />
+                    <svg class="w-10 h-10 text-amber-500/40 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/></svg>
+                    <h4 id="dropped-file-title" class="text-xs font-bold font-serif text-amber-950">Drag & Drop Worksheet here</h4>
+                    <p id="dropped-file-subtitle" class="text-[10px] text-gray-400 mt-1">or click to browse local files on your PC</p>
+                    <div class="mt-4 inline-block text-[9px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded font-semibold uppercase">
+                      PDF • DOCX • PPTX MAXIMUM 40MB
+                    </div>
+                  </div>
+
+                  <button id="btn-trigger-purify" class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-bold text-xs shadow hover:shadow-md cursor-pointer transition flex items-center justify-center gap-1.5 hidden">
+                    <span id="purifier-button-text">Purify File Layout</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Logging Stream Console -->
+              <div class="mt-6">
+                <div id="purifier-logs-console" class="bg-[#1C1A16] text-[#A6E22E] font-mono text-[9px] p-3 rounded-lg h-32 overflow-y-auto leading-normal hidden">
+                  <span class="text-[#6D6B65]">// Clean Log Engine initialized</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Visual Before and After Previews on the right -->
+            <div class="xl:col-span-3 bg-white border border-amber-200 shadow-sm p-6 rounded-2xl flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center pb-3 border-b border-gray-100">
+                  <h3 class="text-sm font-bold text-amber-950 font-serif uppercase tracking-wider">Before / After Live Preview</h3>
+                  <span id="preview-certified-badge" class="font-serif font-bold text-[9px] uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full hidden animate-pulse">
+                    Purified & Certified
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  
+                  <!-- Before Box -->
+                  <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col justify-between relative overflow-hidden select-none h-64 grayscale">
+                    <div id="before-watermark-overlay" class="watermark-overlay opacity-30 select-none absolute inset-0 text-red-500 font-serif uppercase rotate-45 flex items-center justify-center font-black text-xs tracking-widest leading-none pointer-events-none text-center">
+                      THEOS EDUCATIONAL ACADEMY<br/>❌ PRIVATE PROPERTY ❌
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] text-gray-400 font-mono">
+                      <span>REVISION SHEET v1.4</span>
+                      <span>ORIGINAL OVERLAY</span>
+                    </div>
+                    <div class="my-auto space-y-2 relative z-10">
+                      <div class="w-16 h-3 bg-red-400/25 rounded"></div>
+                      <div class="w-4/5 h-2.5 bg-gray-300 rounded"></div>
+                      <div class="w-11/12 h-2.5 bg-gray-300 rounded"></div>
+                      <div class="w-2/3 h-2.5 bg-gray-300 rounded"></div>
+                    </div>
+                    <div class="border-t border-gray-200 pt-2 flex items-center justify-between text-[9px] text-gray-400">
+                      <span>Copyright Notice Block</span>
+                      <span>Page 1 of 12</span>
+                    </div>
+                  </div>
+
+                  <!-- After Box -->
+                  <div id="after-view-box" class="border border-gray-200 bg-gray-50/50 opacity-40 select-none rounded-xl p-4 flex flex-col justify-between relative overflow-hidden transition-all duration-500 h-64">
+                    <div id="after-gold-crest" class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none select-none hidden">
+                      <svg class="w-48 h-48 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+                        <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+                      </svg>
+                    </div>
+
+                    <div class="flex justify-between items-center text-[9px] text-amber-700/80 font-mono font-bold uppercase tracking-wider">
+                      <span>Classroom Resource</span>
+                      <span>4J Certified • ISO 9001</span>
+                    </div>
+
+                    <div id="after-placeholder-content" class="my-auto space-y-2 text-center text-gray-400 text-[11px] font-serif">
+                      <svg class="w-6 h-6 mx-auto text-gray-300 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                      <span>Purify document to unlock gold certified live preview</span>
+                    </div>
+
+                    <div id="after-active-content" class="my-auto space-y-2 relative z-10 hidden">
+                      <div class="flex items-center gap-1.5 mb-2 bg-amber-100/50 px-2 py-1 rounded border border-amber-200/50 w-fit">
+                        <span class="font-serif font-black text-amber-800 text-[10px]">4J Premium Certified</span>
+                      </div>
+                      <div class="w-4/5 h-2.5 bg-amber-900/10 rounded"></div>
+                      <div class="w-11/12 h-2.5 bg-amber-900/10 rounded"></div>
+                      <div class="w-5/6 h-2.5 bg-amber-900/10 rounded"></div>
+                    </div>
+
+                    <div class="border-t border-amber-200 pt-2 flex items-center justify-between text-[9px] font-semibold text-amber-800 font-serif tracking-wide">
+                      <span>Striving For Distinction</span>
+                      <span class="font-mono">Page 1 of 12</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Download Purified Attachment -->
+              <div class="mt-6 flex justify-end">
+                <button id="btn-download-purified" class="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-serif font-bold text-xs uppercase tracking-wider rounded-xl shadow cursor-not-allowed select-none" disabled>
+                  Waiting for purification
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================== SECTION: TRAINER SYSTEM HUB ================== -->
+      <section id="trainer-workspace" class="space-y-6 hidden">
+        
+        <!-- Welcome banner -->
+        <div class="bg-gradient-to-r from-amber-500/10 to-[#DFB627]/10 border-2 border-[#D4AF37] p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-amber-600 text-white rounded-xl">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            </div>
+            <div>
+              <span class="text-[9px] uppercase font-bold text-amber-800 tracking-widest font-mono">Trainer Hub</span>
+              <h2 id="trainer-fullname-heading" class="text-base font-serif text-amber-950 font-extrabold">Stephen Jebadurai G</h2>
+              <p class="text-xs text-gray-500 mt-0.5">Faculty Contact: <span id="trainer-email-span" class="font-mono text-gray-700">stephenjdurai@gmail.com</span></p>
+            </div>
+          </div>
+
+          <!-- Subtabs for secure trainer functions -->
+          <div class="flex flex-wrap gap-2">
+            <button id="btn-trainer-timesheet" class="px-3.5 py-1.5 text-xs font-serif font-bold uppercase rounded-lg border transition bg-amber-600 text-white border-amber-600">
+              📊 Timesheet Calculator
+            </button>
+            <button id="btn-trainer-syllabus" class="px-3.5 py-1.5 text-xs font-serif font-bold uppercase rounded-lg border transition bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
+              📝 Syllabus Board Covered
+            </button>
+            <button id="btn-trainer-qwen" class="px-3.5 py-1.5 text-xs font-serif font-bold uppercase rounded-lg border transition bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
+              🤖 Qwen AI Chatbot
+            </button>
+          </div>
+        </div>
+
+        <!-- TRAINER SUBTAB A: ACTIVE TIMESHEET EXCEL GRID -->
+        <div id="panel-trainer-timesheet" class="space-y-6 block">
+          
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Invoicing parameters checklist -->
+            <div class="bg-amber-500/5 p-5 rounded-2xl border border-amber-200/60 max-h-[350px] overflow-y-auto space-y-4">
+              <h3 class="font-serif font-bold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-1">
+                <svg class="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                UK Academy Payroll Policy
+              </h3>
+              <p class="text-[11px] text-amber-900/90 leading-relaxed font-sans">
+                Tutors compile billable sessions between the <strong class="text-amber-950">26th of the previous month</strong> and the <strong class="text-amber-950">25th of the current month</strong>. Standard UK VAT or tutor invoice models are certified upon submission.
+              </p>
+
+              <!-- Live dynamic stats calculators -->
+              <div class="space-y-2 pt-2 text-xs">
+                <div class="flex justify-between py-1.5 border-b border-amber-200/50">
+                  <span class="text-gray-550">Billing Cycle:</span>
+                  <span class="font-bold text-amber-950 font-mono">26 Apr – 25 May</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-amber-200/50">
+                  <span class="text-gray-550">Active Hourly Rate:</span>
+                  <span class="font-bold text-amber-950 font-mono">£<span id="label-billing-rate">45</span> / hr</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-amber-200/50">
+                  <span class="text-gray-550">Total Billable Hours:</span>
+                  <span class="font-bold text-emerald-800 font-mono"><span id="metric-timesheet-hours">0</span> hrs</span>
+                </div>
+                <div class="flex justify-between py-1.5 pt-3">
+                  <span class="text-amber-900 font-serif font-bold">Total Computed Pay:</span>
+                  <span class="font-serif font-black text-sm text-[#926B06] font-mono">£<span id="metric-timesheet-pay">0.00</span></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timesheet interactive log input form (Excel mimic) -->
+            <div class="lg:col-span-2 bg-white border border-amber-200 p-5 rounded-2xl shadow-sm space-y-4">
+              <h3 class="font-serif font-bold text-amber-950 text-xs uppercase tracking-wider pb-2 border-b border-gray-150">
+                Log A Billable Tutoring Session (Spreadsheet Stream)
+              </h3>
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                <div>
+                  <label class="block text-[9px] uppercase font-bold text-gray-400 mb-1">Date</label>
+                  <input id="time-log-date" type="date" class="w-full p-2 bg-gray-50 border border-gray-300 rounded focus:border-amber-500 focus:bg-white focus:outline-none font-mono" />
+                </div>
+                <div>
+                  <label class="block text-[9px] uppercase font-bold text-gray-400 mb-1">Class/Topic Subject</label>
+                  <input id="time-log-subject" type="text" placeholder="e.g. Y12 Mechanics SUVAT" class="w-full p-2 bg-gray-50 border border-gray-300 rounded focus:border-amber-500 focus:bg-white focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-[9px] uppercase font-bold text-gray-400 mb-1">Hours Spent</label>
+                  <input id="time-log-hours" type="number" step="0.5" value="1.0" class="w-full p-2 bg-gray-50 border border-gray-300 rounded focus:border-amber-500 focus:bg-white focus:outline-none font-mono" />
+                </div>
+                <div class="flex items-end">
+                  <button id="btn-add-timesheet-row" class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-serif font-bold text-xs uppercase tracking-wider rounded transition cursor-pointer">
+                    Insert session
+                  </button>
+                </div>
+              </div>
+
+              <!-- Quick helper suggestion box -->
+              <div class="bg-gray-50 p-2.5 rounded-lg border border-gray-200 text-[10px] text-gray-500 flex items-center justify-between">
+                <span>⚡ Fill with Stephen's Tuesday slots:</span>
+                <button id="btn-fill-suggested-shift" class="px-2 py-0.5 bg-amber-500/10 text-amber-800 hover:bg-amber-500/20 rounded font-bold uppercase scale-95 cursor-pointer">
+                  Autofill Stephen's Y12 slot
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- The Core Excel Spreadsheet Bill grid -->
+          <div class="bg-white border border-amber-300 rounded-2xl p-5 shadow-sm space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-150 pb-3">
+              <h3 class="font-serif font-bold text-amber-950 text-sm">
+                Active Excel Billing Statement Workbook
+              </h3>
+              <div class="flex gap-2">
+                <button id="btn-timesheet-print" class="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-300 rounded text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer">
+                  Export CSV Text
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border border-collapse border-gray-300">
+                <thead>
+                  <tr class="bg-slate-100 text-gray-700 font-mono text-[10px]">
+                    <th class="border border-gray-300 p-2 text-center w-12 bg-slate-200">A</th>
+                    <th class="border border-gray-300 p-2 bg-slate-200">B</th>
+                    <th class="border border-gray-300 p-2 bg-slate-200">C</th>
+                    <th class="border border-gray-300 p-2 bg-slate-200">D</th>
+                    <th class="border border-gray-300 p-2 bg-slate-200">E</th>
+                    <th class="border border-gray-300 p-2 text-right bg-slate-200">F</th>
+                    <th class="border border-gray-300 p-2 text-center w-24 bg-slate-200">G</th>
+                  </tr>
+                  <tr class="bg-slate-50 text-amber-950 font-serif border-b border-gray-350">
+                    <th class="border border-gray-300 p-2 text-center text-gray-500">Row</th>
+                    <th class="border border-gray-300 p-2 font-bold uppercase text-[9px]">Class Date</th>
+                    <th class="border border-gray-300 p-2 font-bold uppercase text-[9px]">Course / Subject Description</th>
+                    <th class="border border-gray-300 p-2 font-bold uppercase text-[9px]">Logged Hours</th>
+                    <th class="border border-gray-300 p-2 font-bold uppercase text-[9px]">Hourly Rate</th>
+                    <th class="border border-gray-300 p-2 font-bold uppercase text-[9px] text-right">Computed Total Pay</th>
+                    <th class="border border-gray-300 p-2 font-bold uppercase text-[9px] text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="timesheet-excel-rows" class="font-mono text-[11px]">
+                  <!-- Excel mock rows rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TRAINER SUBTAB B: SYLLABUS COMPLETES -->
+        <div id="panel-trainer-syllabus" class="space-y-6 hidden">
+          <div class="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm">
+            <h3 class="font-serif font-bold text-amber-950 text-sm mb-1">UK Board Curriculum Milestones Covered</h3>
+            <p class="text-xs text-gray-500 mb-6">Mark lesson syllabus blocks as Complete, In Progress or Backlog. This links back to the guest resource drive alignments instantly.</p>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-gray-200 text-amber-900 font-serif">
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Board</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Year Level</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Subject</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Module Topic</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Topic Milestones</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px]">Current Status</th>
+                    <th class="py-2.5 font-bold uppercase tracking-wider text-[10px] text-right">Set Progress Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="trainer-syllabus-tbody">
+                  <!-- Dynamic render -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TRAINER SUBTAB C: QWEN AI TUTOR CHATBOT -->
+        <div id="panel-trainer-qwen" class="space-y-6 hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            
+            <!-- Sidebar with pre-tested prompts -->
+            <div class="lg:col-span-1 bg-amber-500/5 p-4 rounded-xl border border-amber-200">
+              <h3 class="text-sm font-bold font-serif text-amber-900 uppercase flex items-center gap-1.5 mb-3">
+                <svg class="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088c.302.18.667.18.969 0l4-1.714a1 1 0 01.788-1.838l-4 1.714a.999.999 0 01-.356.257L5.25 5.683V9h6V5.683l2.856-1.224a1 1 0 000-1.84l-7-3zM5 12.25V15a2 2 0 002 2h6a2 2 0 002-2v-2.75l-4-1.714a1 1 0 01-.788 0l-4 1.714z"/></svg>
+                UK Board Subjects
+              </h3>
+              <p class="text-xs text-gray-500 mb-4 font-sans leading-relaxed">
+                Click a core syllabus prompt below to instantly generate textbook lesson matrices or exam summaries.
+              </p>
+
+              <div class="space-y-2">
+                <button class="btn-chat-prompt w-full text-left p-2.5 bg-white hover:bg-amber-50 text-xs font-semibold text-amber-900 border border-amber-200 rounded-lg shadow-sm transition flex items-start gap-1.5">
+                  Year 12 Mechanics SUVAT syllabus key points
+                </button>
+                <button class="btn-chat-prompt w-full text-left p-2.5 bg-white hover:bg-amber-50 text-xs font-semibold text-amber-900 border border-amber-200 rounded-lg shadow-sm transition flex items-start gap-1.5">
+                  GCSE Year 8 Biology Digestive System teaching tips
+                </button>
+                <button class="btn-chat-prompt w-full text-left p-2.5 bg-white hover:bg-amber-50 text-xs font-semibold text-amber-900 border border-amber-200 rounded-lg shadow-sm transition flex items-start gap-1.5">
+                  Difference between AQA and Edexcel Maths boards
+                </button>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-amber-200/50">
+                <div class="flex items-center gap-1.5 text-xs font-bold text-amber-800 font-serif uppercase">
+                  <span>GCSE & Edexcel Specs</span>
+                </div>
+                <p class="text-[10px] text-amber-700/80 mt-1 leading-normal">
+                  Expertly tuned for GCE Mathematics, Mechanics and Sciences used in elite tutorial programs.
+                </p>
+              </div>
+            </div>
+
+            <!-- Chat interface window -->
+            <div class="lg:col-span-3 bg-white p-5 rounded-xl border border-amber-200 shadow-sm flex flex-col h-[500px]">
+              
+              <!-- Chat Header -->
+              <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+                <div class="p-2 bg-gradient-to-r from-amber-500 to-amber-700 text-white rounded-lg shadow-inner">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                </div>
+                <div>
+                  <h3 class="font-serif font-bold text-amber-950 text-sm">Ollama Qwen AI Tutor</h3>
+                  <span class="text-[10px] text-emerald-600 font-bold uppercase flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                    UK Curriculum Specialist • Live Proxy
+                  </span>
+                </div>
+              </div>
+
+              <!-- Message Stream scroll window -->
+              <div id="chat-messages-container" class="flex-1 overflow-y-auto py-4 space-y-4 pr-1 text-xs">
+                <!-- Preloaded Greeting -->
+                <div class="flex justify-start">
+                  <div class="max-w-[85%] rounded-2xl p-4 bg-amber-500/5 text-amber-950 rounded-tl-none border border-amber-150 leading-relaxed font-sans space-y-2 whitespace-pre-wrap">
+                    Hello! I am <strong class="text-amber-800">Qwen UK Board AI Expert</strong>.
+
+                    I am configured for 4J LMS and fully aware of the GCSE and Edexcel systems, including Mechanics Maths, Year 8 Biology/Chemistry/Physics, and Year 4–7 English specifications.
+
+                    How can I assist your lesson planning or syllabus alignment today?
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dynamic Loader bubble -->
+              <div id="chat-thinking-bubble" class="flex justify-start hidden pb-2">
+                <div class="bg-amber-50/50 rounded-2xl p-3 text-xs font-semibold text-amber-850 flex items-center gap-2 border border-amber-100">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-ping"></span>
+                  <span>Thinking in Qwen AI board guidelines...</span>
+                </div>
+              </div>
+
+              <!-- Chat submit form -->
+              <div class="pt-3 border-t border-gray-150">
+                <form id="chat-message-form" class="flex gap-2">
+                  <input id="chat-query-input" type="text" placeholder="Ask Qwen AI tutor (e.g. outline year 12 SUVAT lesson plans)..." class="flex-1 text-xs px-4 py-3 border border-gray-300 focus:border-amber-500 focus:outline-none rounded-xl" required />
+                  <button type="submit" class="bg-amber-600 text-white px-5 py-3 rounded-xl hover:bg-amber-700 transition flex items-center gap-1 font-semibold text-xs cursor-pointer">
+                    Ask AI
+                  </button>
+                </form>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================== SECTION: ADMIN MASTER DESK ================== -->
+      <section id="admin-workspace" class="space-y-6 hidden">
+        
+        <!-- Metrics strip -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div class="bg-white border border-amber-200 p-4 rounded-xl shadow-sm text-center">
+            <span class="block font-serif text-lg font-bold text-amber-950" id="admin-stat-trainers">3</span>
+            <span class="text-[10px] uppercase font-bold text-gray-500">Active Faculty Trainers</span>
+          </div>
+          <div class="bg-white border border-amber-200 p-4 rounded-xl shadow-sm text-center">
+            <div class="flex items-center justify-center gap-1.5">
+              <input id="admin-input-students" type="number" value="148" class="w-14 text-center text-lg font-serif font-bold text-amber-950 focus:outline-none bg-amber-50 rounded" />
+            </div>
+            <span class="text-[10px] uppercase font-bold text-gray-500">Total Registrar Students</span>
+          </div>
+          <div class="bg-white border border-amber-200 p-4 rounded-xl shadow-sm text-center">
+            <span class="block font-serif text-lg font-bold text-amber-950" id="admin-stat-slots">13</span>
+            <span class="text-[10px] uppercase font-bold text-gray-500">Scheduled active slots</span>
+          </div>
+          <div class="bg-white border border-amber-200 p-4 rounded-xl shadow-sm text-center">
+            <span class="block font-serif text-xs font-bold text-emerald-800 pt-1">Verified System</span>
+            <span class="text-[10px] uppercase font-bold text-gray-500">GCSE / EDEXCEL / AQA</span>
+          </div>
+        </div>
+
+        <!-- split controls -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Column A: Faculty Registration -->
+          <div class="bg-white border border-amber-200 p-5 rounded-2xl shadow-sm space-y-4">
+            <h3 class="font-serif font-bold text-amber-950 text-sm pb-2 border-b border-gray-100 flex items-center gap-2">
+              Faculty Registry Console
+            </h3>
+
+            <!-- Creation form styled specifically -->
+            <form id="admin-add-trainer-form" class="space-y-3 bg-amber-500/5 p-3 rounded-xl border border-amber-100">
+              <h4 class="text-[10px] uppercase font-extrabold text-amber-900 tracking-wider">Register New Trainer</h4>
+              <div>
+                <input id="new-trainer-name" type="text" placeholder="Trainer Full Name" class="w-full text-xs p-2 bg-white border border-gray-300 rounded focus:border-amber-500 outline-none" required />
+              </div>
+              <div>
+                <input id="new-trainer-email" type="email" placeholder="Faculty Email" class="w-full text-xs p-2 bg-white border border-gray-300 rounded focus:border-amber-500 outline-none" required />
+              </div>
+              <div>
+                <input id="new-trainer-pass" type="password" placeholder="Passphrase key" class="w-full text-xs p-2 bg-white border border-gray-300 rounded focus:border-amber-500 outline-none" required />
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Rate (£/hr)</label>
+                  <input id="new-trainer-rate" type="number" value="45" class="w-full text-xs p-2 bg-white border border-gray-300 rounded" required />
+                </div>
+                <div>
+                  <label class="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Subjects split with ','</label>
+                  <input id="new-trainer-subjs" type="text" value="Maths, Physics" class="w-full text-xs p-2 bg-white border border-gray-300 rounded" required />
+                </div>
+              </div>
+              <button type="submit" class="w-full py-2 bg-amber-600 text-white rounded font-serif text-xs font-bold uppercase hover:bg-amber-700 transition cursor-pointer">
+                Confirm Registrar
+              </button>
+            </form>
+
+            <div class="space-y-2 mt-4">
+              <h4 class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Faculty Roster registry</h4>
+              <div id="admin-trainers-list-container" class="space-y-2 max-h-48 overflow-y-auto">
+                <!-- Dynamic trainers logged -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Column B: Time Slot Calendar Schedule Planner -->
+          <div class="bg-white border border-amber-200 p-5 rounded-2xl shadow-sm space-y-4">
+            <h3 class="font-serif font-bold text-amber-950 text-sm pb-2 border-b border-gray-100">
+              Scheduled Calendar Slot Planner
+            </h3>
+
+            <form id="admin-add-schedule-form" class="space-y-3 bg-amber-500/5 p-3 rounded-xl border border-amber-100">
+              <h4 class="text-[10px] uppercase font-extrabold text-amber-900 tracking-wider">Schedule Class Session</h4>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Instructor Name</label>
+                  <select id="sched-trainer-select" class="w-full text-xs p-1.5 bg-white border border-gray-300 rounded">
+                    <!-- Dynamic picker options -->
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Day of Week</label>
+                  <select id="sched-day-select" class="w-full text-xs p-1.5 bg-white border border-gray-300 rounded">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Start Time</label>
+                  <input id="sched-start-time" type="time" value="16:30" class="w-full text-xs p-1.5 bg-white border border-gray-300 rounded" required />
+                </div>
+                <div>
+                  <label class="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">End Time</label>
+                  <input id="sched-end-time" type="time" value="18:00" class="w-full text-xs p-1.5 bg-white border border-gray-300 rounded" required />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Subject Stream</label>
+                  <input id="sched-subj-input" type="text" value="Maths" class="w-full text-xs p-1.5 bg-white border border-gray-300 rounded" required />
+                </div>
+                <div>
+                  <label class="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Year Group</label>
+                  <input id="sched-year-input" type="text" value="Year 8" class="w-full text-xs p-1.5 bg-white border border-gray-300 rounded" required />
+                </div>
+              </div>
+
+              <div>
+                <input id="sched-desc-input" type="text" placeholder="Lesson Memo e.g. Riaz maths, (1:2)" class="w-full text-xs p-2 bg-white border border-gray-300 rounded" />
+              </div>
+
+              <button type="submit" class="w-full py-2 bg-amber-600 text-white rounded font-serif text-xs font-bold uppercase hover:bg-amber-700 transition cursor-pointer">
+                Lock scheduled slot
+              </button>
+            </form>
+          </div>
+
+          <!-- Column C: Custom Landing Text Content details -->
+          <div class="bg-white border border-amber-200 p-5 rounded-2xl shadow-sm space-y-4">
+            <h3 class="font-serif font-bold text-amber-950 text-sm pb-2 border-b border-gray-100">
+              Customize Academy Profile Details
+            </h3>
+
+            <div class="space-y-2">
+              <label class="block text-[9px] uppercase font-bold text-gray-500">Academy Profile Description Text Info</label>
+              <textarea id="admin-about-textbox" rows="6" class="w-full text-xs p-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:border-amber-500 outline-none leading-relaxed" required></textarea>
+            </div>
+
+            <div class="pt-3 border-t border-gray-100">
+              <button id="btn-save-admin-about" type="button" class="w-full py-2 bg-emerald-600 text-white rounded-lg font-serif text-xs font-bold uppercase hover:bg-emerald-700 transition cursor-pointer">
+                Save configuration
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Complete master list of timetables for admin audit deletion -->
+        <div class="bg-white border border-amber-200 rounded-2xl p-6 shadow-sm overflow-hidden">
+          <h3 class="font-serif font-bold text-amber-950 text-sm pb-3 border-b border-gray-150 mb-4 uppercase tracking-wider">
+            Full Academy Scheduled Timetable List (UK Time)
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="border-b border-gray-200 text-amber-900 font-serif uppercase text-[9px]">
+                  <th class="py-2">Day of week</th>
+                  <th class="py-2">Instructor</th>
+                  <th class="py-2">Year Level</th>
+                  <th class="py-2">Course Subject Info</th>
+                  <th class="py-2">Time Slot UK</th>
+                  <th class="py-2 text-right">Delete Slot</th>
+                </tr>
+              </thead>
+              <tbody id="admin-timetable-tbody" class="font-mono">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================== SECTION: INTERMEDIATE DEMO SECURE STAFF LOGIN MODAL ================== -->
+      <section id="login-modal" class="bg-white border border-amber-200 rounded-2xl p-6 shadow-sm max-w-sm mx-auto block">
+        <h3 class="text-center font-serif text-sm font-bold text-amber-950 uppercase tracking-widest pb-3 border-b border-gray-150 flex items-center justify-center gap-1.5">
+          <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          Secure Staff Login
+        </h3>
+        
+        <form id="login-form-submit" class="space-y-3 mt-4">
+          <div>
+            <label class="block text-[8px] uppercase font-bold text-gray-500 mb-1">Email credentials</label>
+            <input id="login-email-input" type="email" placeholder="e.g. stephenjdurai@gmail.com" class="w-full text-xs p-2.5 border border-gray-300 focus:border-amber-500 rounded-lg outline-none" required />
+          </div>
+
+          <div>
+            <label class="block text-[8px] uppercase font-bold text-gray-500 mb-1">Secure Passphrase</label>
+            <input id="login-password-input" type="password" placeholder="e.g. password123" class="w-full text-xs p-2.5 border border-gray-300 focus:border-amber-500 rounded-lg outline-none" required />
+          </div>
+
+          <!-- Alert element -->
+          <div id="login-alert-box" class="bg-red-50 text-red-700 p-2.5 rounded text-[10px] font-sans flex items-start gap-1 hidden">
+            <span>Invalid Credentials. Quick preloaded options are referenced below.</span>
+          </div>
+
+          <button type="submit" class="w-full py-2 bg-amber-600 text-white font-serif tracking-wider text-xs font-bold uppercase rounded-lg hover:bg-amber-700 transition cursor-pointer">
+            Access secure platform
+          </button>
+        </form>
+
+        <div class="mt-4 pt-3 border-t border-gray-150 text-[10px] text-gray-550 space-y-1 bg-amber-500/5 p-2 rounded leading-relaxed">
+          <p class="font-bold uppercase tracking-wider text-[#A1790B]">Preloaded Demo Accounts:</p>
+          <p>• <strong>Stephen:</strong> stephenjdurai@gmail.com / password123</p>
+          <p>• <strong>Admin desk:</strong> admin@4j.com / admin123</p>
+        </div>
+      </section>
+
+    </main>
+    <!-- {% endblock %} -->
+
+    <!-- Majestic Footer -->
+    <footer id="app-footer" class="bg-[#181612] text-white py-8 border-t border-amber-600/20 px-6 mt-12 select-none">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <!-- small majestic crown laurel logo -->
+          <svg class="w-8 h-8 text-amber-500 opacity-80" fill="currentColor" viewBox="0 0 24 24">
+            <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+          </svg>
+          <div class="text-left">
+            <span class="font-serif font-bold text-[14px] text-amber-400 tracking-widest block uppercase">4J's Educational Academy</span>
+            <span class="font-mono text-[9px] text-stone-400 uppercase tracking-[0.2em] font-semibold">Striving For Distinction • UK National Curriculum Specialist</span>
+          </div>
+        </div>
+
+        <div class="text-right text-[10px] text-stone-400 font-mono space-y-0.5">
+          <p>© 2026 4J LMS Core Admin Platform. Designed with pure JavaScript & Django views.</p>
+          <p>Mapped for GCSE, Year 4-7 English, science modules and Edexcel Mechanics.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Pure JavaScript load entry file -->
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

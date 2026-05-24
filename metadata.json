@@ -1,0 +1,6 @@
+{
+  "name": "4J LMS",
+  "description": "An elegant white-and-gold Learning Management System for 4J's Educational Academy. Features a dynamic UK GCSE/Edexcel curriculum tracker, live schedule tracking, automatic invoice/timesheet calculation, resource folder browser, document watermark cleaner, and a Qwen-powered expert AI chat tutor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

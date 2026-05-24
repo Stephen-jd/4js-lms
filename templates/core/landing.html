@@ -1,0 +1,1441 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4J LMS - Premium Tuition of Distinction Portal</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            royal: {
+              gold: '#927116',
+              lightgold: '#D4AF37',
+              darkgold: '#684f0b',
+              ivory: '#FAF9F5',
+              cream: '#FCFAF5',
+              onyx: '#181612',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts & Custom Premium Design Stylesheet -->
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+  
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* Prevent JS flex-to-block display bug for centered modal alignment */
+    #login-modal[style*="display: block"] {
+      display: flex !important;
+    }
+  </style>
+</head>
+<body class="bg-royal-ivory text-royal-onyx min-h-screen flex flex-col antialiased relative overflow-x-hidden">
+
+  <!-- ==================== PREMIUM BRAND GLOW BLOBS ==================== -->
+  <div class="fixed top-0 left-0 w-[500px] h-[500px] bg-amber-400/5 rounded-full blur-[150px] pointer-events-none -translate-x-1/2 -translate-y-1/2 z-0"></div>
+  <div class="fixed bottom-0 right-0 w-[600px] h-[600px] bg-royal-gold/5 rounded-full blur-[180px] pointer-events-none translate-x-1/3 translate-y-1/3 z-0"></div>
+  <div class="fixed top-1/3 right-10 w-[300px] h-[300px] bg-amber-500/3 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+  <!-- ==================== 4J's LUXUROUS INTRO SPLASH SCREEN ==================== -->
+  <div id="splash-screen" class="fixed inset-0 bg-[#14120e] flex flex-col items-center justify-center z-[9999] transition-all duration-[1000ms] ease-in-out">
+    <div id="splash-logo-container" class="text-center space-y-6 transform scale-90 opacity-0 transition-all duration-[1200ms] ease-out">
+      
+      <!-- Large Gold Royal Wreath & Crest Logo -->
+      <div class="relative w-36 h-36 bg-white rounded-full flex items-center justify-center mx-auto shadow-2xl border-4 border-royal-lightgold/40 overflow-hidden p-2">
+        <!-- Shine Animation Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+        <img src="{% static 'images/logo.png' %}" alt="4J Logo" class="w-full h-full object-contain">
+      </div>
+      
+      <div class="space-y-2">
+        <h2 class="font-serif font-black text-2xl sm:text-4xl text-royal-lightgold tracking-wide uppercase leading-none drop-shadow-md">
+          4J's Educational Academy
+        </h2>
+        <div class="h-[1.5px] w-28 bg-gradient-to-r from-transparent via-royal-lightgold to-transparent mx-auto"></div>
+        <p class="text-[10px] sm:text-xs uppercase tracking-[0.3em] font-sans-alt text-gray-400 font-bold">
+          Striving for Distinction
+        </p>
+      </div>
+
+      <!-- Luxury Progress bar -->
+      <div class="w-48 h-[3px] bg-slate-800 rounded-full mx-auto overflow-hidden relative border border-white/5">
+        <div class="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full w-0 transition-all duration-[1200ms] ease-out" id="splash-progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes shimmer {
+      100% {
+        transform: translateX(100%);
+      }
+    }
+  </style>
+
+  <script>
+    (function() {
+      // Run immediately before page rendering completes to prevent any flash of content
+      document.addEventListener("DOMContentLoaded", function() {
+        const splash = document.getElementById("splash-screen");
+        const logo = document.getElementById("splash-logo-container");
+        const progress = document.getElementById("splash-progress-bar");
+        
+        if (!splash || !logo) return;
+        
+        // Disable scroll temporarily while loading
+        document.body.style.overflow = "hidden";
+        
+        // 1. Start Zoom-In and Fade-In of the logo
+        setTimeout(() => {
+          logo.classList.remove("opacity-0", "scale-90");
+          logo.classList.add("opacity-100", "scale-105");
+          if (progress) progress.style.width = "100%";
+        }, 100);
+        
+        // 2. Start Zoom-Out and Fade-Out of the whole splash screen
+        setTimeout(() => {
+          logo.classList.remove("scale-105");
+          logo.classList.add("scale-110", "opacity-0");
+          splash.classList.add("opacity-0", "pointer-events-none", "scale-105");
+          
+          // Re-enable scroll
+          document.body.style.overflow = "";
+        }, 1600);
+        
+        // 3. Completely remove from layout after transition completes
+        setTimeout(() => {
+          splash.style.display = "none";
+        }, 2600);
+      });
+    })();
+  </script>
+
+  <!-- Wrapper to isolate main layout above glowing blobs -->
+  <div class="relative z-10 flex flex-col min-h-screen">
+
+  <!-- ==================== PREMIUM BRAND HEADER ==================== -->
+  <header id="app-main-header" class="border-b border-[#d4af37]/20 bg-white/90 backdrop-blur sticky top-0 z-50 transition duration-300">
+    <div class="w-full max-w-none px-6 md:px-10 lg:px-14 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand Logo / Royal Crest -->
+      <a href="/" class="flex items-center gap-3 group shrink-0 transition-transform duration-300 transform hover:translate-y-[-1px]">
+        <div class="relative overflow-hidden w-12 h-12 rounded-full bg-white shadow-sm border border-[#d4af37]/60 flex items-center justify-center p-1 group-hover:scale-105 transition-transform duration-300 shrink-0">
+          <img src="{% static 'images/logo.png' %}" alt="4J Logo" class="w-full h-full object-contain scale-[1.05]">
+        </div>
+        <div>
+          <h1 class="font-serif font-black text-base sm:text-lg lg:text-xl tracking-wide text-[#927116] leading-none">4J's Educational Academy</h1>
+          <p class="text-[9.5px] sm:text-[10.5px] uppercase tracking-[0.25em] font-sans text-slate-400 font-bold mt-1.5">Striving for Distinction</p>
+        </div>
+      </a>
+
+      <!-- UK Live Clock & Date Radar -->
+      <div class="flex items-center gap-2.5 sm:gap-3 px-5 py-2 rounded-full border border-[#d4af37]/45 bg-[#FCFAF5]/90 shadow-md backdrop-blur-sm transition-all duration-300 hover:border-[#d4af37]/80 hover:shadow-lg shrink-0">
+        <span class="relative flex h-2 w-2 shrink-0">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d37300] opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-[#d37300]"></span>
+        </span>
+        <div class="font-sans font-extrabold text-[#927116] flex items-center gap-1">
+          <span id="live-uk-time" class="tracking-wider text-xs sm:text-sm min-w-[62px] sm:min-w-[68px] inline-block text-center tabular-nums">00:00:00</span>
+          <span class="text-[8px] sm:text-[9.5px] text-slate-400 font-bold uppercase tracking-wider">UK</span>
+        </div>
+        <span class="text-slate-300 font-light mx-0.5">|</span>
+        <div id="live-uk-date" class="text-[10.5px] sm:text-[11.5px] text-slate-650 font-serif font-medium tracking-wide whitespace-nowrap">Loading Date...</div>
+      </div>
+
+      <!-- Main Navigation Menu -->
+      <nav class="flex items-center gap-1.5 sm:gap-3">
+        <button id="btn-tab-public" class="px-4.5 py-2 rounded-xl text-xs sm:text-sm font-serif font-black uppercase transition-all duration-300 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow hover:shadow-md hover:scale-[1.02] active:scale-[0.98] tracking-wider border border-[#d4af37]/20">
+          Public Portal
+        </button>
+        <button id="btn-tab-trainer" class="px-3.5 py-2 text-xs sm:text-sm font-serif font-black uppercase transition-all duration-300 text-[#1e293b] hover:text-[#927116] hover:scale-[1.02] active:scale-[0.98] hidden tracking-wider border border-transparent hover:border-[#d4af37]/20 hover:bg-[#FCFAF5]/60 rounded-xl">
+          Trainer Portal <span id="trainer-name-nav" class="text-[10px] text-amber-700 ml-1 font-sans font-extrabold"></span>
+        </button>
+        <button id="btn-tab-admin" class="px-3.5 py-2 text-xs sm:text-sm font-serif font-black uppercase transition-all duration-300 text-[#1e293b] hover:text-[#927116] hover:scale-[1.02] active:scale-[0.98] hidden tracking-wider border border-transparent hover:border-[#d4af37]/20 hover:bg-[#FCFAF5]/60 rounded-xl">
+          Admin Portal
+        </button>
+        <button id="btn-logout" class="px-3.5 py-2 text-xs sm:text-sm font-serif font-black uppercase transition-all duration-300 text-[#927116] hover:text-red-750 hover:scale-[1.02] active:scale-[0.98] hidden tracking-wider border border-transparent hover:border-red-200/50 hover:bg-red-50/50 rounded-xl flex items-center gap-1.5">
+          <i class="fa-solid fa-power-off text-xs sm:text-sm"></i> Log Out
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ==================== MAIN WORKSPACE CONTAINER ==================== -->
+  <main class="flex-grow w-full max-w-none px-6 md:px-10 lg:px-14 py-6">
+
+    <!-- ==================== 1. PUBLIC GUEST WORKSPACE ==================== -->
+    <div id="guest-view-workspace" class="space-y-6">
+      
+      <!-- Subtabs menu -->
+      <div class="border-b border-gray-200 flex justify-center sm:justify-start gap-4 mb-4">
+        <button id="btn-sub-landing" class="py-2 px-4 font-serif font-bold uppercase text-xs tracking-wider border-b-2 border-amber-600 text-amber-900 transition">
+          Academy Hub
+        </button>
+        <button id="btn-sub-syllabus" class="py-2 px-4 font-serif font-bold uppercase text-xs tracking-wider border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition">
+          Syllabus & Weightage
+        </button>
+        <button id="btn-sub-resources" class="py-2 px-4 font-serif font-bold uppercase text-xs tracking-wider border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition">
+          Explore Live Worksheet
+        </button>
+        <button id="btn-sub-purifier" class="py-2 px-4 font-serif font-bold uppercase text-xs tracking-wider border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition">
+          Document Watermark Purifier
+        </button>
+      </div>
+
+      <!-- 1.a PUBLIC LANDING DASHBOARD -->
+      <div id="panel-guest-landing" class="space-y-6">
+        
+        <!-- Premium Welcome Banner Card with Auto-Slide Carousel -->
+        <div class="relative overflow-hidden bg-dark-gradient rounded-3xl border border-royal-lightgold/10 p-8 sm:p-10 text-white shadow-lg shadow-center">
+          <div class="absolute right-0 top-0 translate-x-1/4 -translate-y-1/4 w-96 h-96 bg-royal-lightgold/10 rounded-full blur-3xl"></div>
+          <div class="absolute left-12 bottom-0 translate-y-1/2 w-64 h-64 bg-amber-600/10 rounded-full blur-2xl"></div>
+          
+          <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <!-- Left Column: Welcome Text & Call-to-Actions -->
+            <div class="lg:col-span-7 space-y-6">
+              <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/25 rounded-full">
+                <i class="fa-solid fa-medal text-amber-400 text-xs"></i>
+                <span class="text-[9px] uppercase tracking-widest font-mono text-amber-400 font-bold">Royal London Standard</span>
+              </div>
+              
+              <h2 class="font-serif font-black text-3xl sm:text-5xl leading-tight animate-fade-in-up">
+                TUITION OF <br class="hidden sm:inline">
+                <span class="text-gold-gradient font-black">ABSOLUTE DISTINCTION</span>
+              </h2>
+              
+              <p id="landing-about-text" class="text-xs sm:text-sm text-gray-300 leading-relaxed font-medium animate-fade-in-up-delay-1">
+                Welcome to 4J's Educational Academy. We are structured to offer absolute dedication in high-standard tuition, specializing in the UK National Curriculum boards including GCSE, Edexcel, AQA, and OCR.
+              </p>
+              
+              <div class="flex flex-wrap gap-4 pt-2 animate-fade-in-up-delay-2">
+                <button id="btn-jump-resources" class="px-6 py-2.5 bg-gold-gradient shimmer-gold-btn text-royal-onyx font-serif font-black text-xs uppercase tracking-wider rounded-xl shadow cursor-pointer transition active:scale-95">
+                  Explore Lesson Worksheets
+                </button>
+                <a href="#active-radar-section" class="px-5 py-2.5 border border-white/20 hover:bg-white/5 rounded-xl text-xs font-bold uppercase transition flex items-center gap-2">
+                  <span class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
+                  See Live Batches
+                </a>
+              </div>
+            </div>
+
+            <!-- Right Column: Auto-sliding Carousel of distinction -->
+            <div class="lg:col-span-5 w-full">
+              <div class="w-full relative overflow-hidden rounded-2xl border border-royal-lightgold/30 bg-royal-onyx/40 shadow-2xl aspect-[4/3] sm:aspect-[16/11]">
+                <!-- Slider Track -->
+                <div id="hero-carousel" class="flex transition-transform duration-700 ease-out h-full w-full">
+                  <!-- Slide 1 -->
+                  <div class="w-full h-full shrink-0 relative bg-[#181612] flex items-center justify-center overflow-hidden">
+                    <!-- Blurred background glow -->
+                    <img src="{% static 'images/slide1.jpg' %}" alt="4J Academy Award Ceremony Glow" class="absolute inset-0 w-full h-full object-cover blur-md opacity-25 scale-105 select-none pointer-events-none">
+                    <!-- Sharp contained image -->
+                    <img src="{% static 'images/slide1.jpg' %}" alt="4J Academy Award Ceremony" class="relative z-10 max-h-full max-w-full object-contain">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 text-center z-20">
+                      <p class="font-serif font-black text-[10px] text-royal-lightgold tracking-wide uppercase">Academy Awards 2026</p>
+                      <p class="text-[9px] text-gray-300 font-sans">Honoring our pupils for academic distinction</p>
+                    </div>
+                  </div>
+                  <!-- Slide 2 -->
+                  <div class="w-full h-full shrink-0 relative bg-[#181612] flex items-center justify-center overflow-hidden">
+                    <!-- Blurred background glow -->
+                    <img src="{% static 'images/slide2.jpg' %}" alt="Medal Presentation Glow" class="absolute inset-0 w-full h-full object-cover blur-md opacity-25 scale-105 select-none pointer-events-none">
+                    <!-- Sharp contained image -->
+                    <img src="{% static 'images/slide2.jpg' %}" alt="Medal Presentation" class="relative z-10 max-h-full max-w-full object-contain">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 text-center z-20">
+                      <p class="font-serif font-black text-[10px] text-royal-lightgold tracking-wide uppercase">Absolute Dedication</p>
+                      <p class="text-[9px] text-gray-300 font-sans">Guaranteed results and personal mentorship</p>
+                    </div>
+                  </div>
+                  <!-- Slide 3 -->
+                  <div class="w-full h-full shrink-0 relative bg-[#181612] flex items-center justify-center overflow-hidden">
+                    <!-- Blurred background glow -->
+                    <img src="{% static 'images/slide3.jpg' %}" alt="Pupil Recognition Glow" class="absolute inset-0 w-full h-full object-cover blur-md opacity-25 scale-105 select-none pointer-events-none">
+                    <!-- Sharp contained image -->
+                    <img src="{% static 'images/slide3.jpg' %}" alt="Pupil Recognition" class="relative z-10 max-h-full max-w-full object-contain">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 text-center z-20">
+                      <p class="font-serif font-black text-[10px] text-royal-lightgold tracking-wide uppercase">Certified Success Path</p>
+                      <p class="text-[9px] text-gray-300 font-sans">UK Mapped Curriculum Standards</p>
+                    </div>
+                  </div>
+                  <!-- Slide 4 -->
+                  <div class="w-full h-full shrink-0 relative bg-[#181612] flex items-center justify-center overflow-hidden">
+                    <!-- Blurred background glow -->
+                    <img src="{% static 'images/slide4.jpg' %}" alt="Tuition Excellence Ceremony Glow" class="absolute inset-0 w-full h-full object-cover blur-md opacity-25 scale-105 select-none pointer-events-none">
+                    <!-- Sharp contained image -->
+                    <img src="{% static 'images/slide4.jpg' %}" alt="Tuition Excellence Ceremony" class="relative z-10 max-h-full max-w-full object-contain">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 text-center z-20">
+                      <p class="font-serif font-black text-[10px] text-royal-lightgold tracking-wide uppercase">Distinctive Leadership</p>
+                      <p class="text-[9px] text-gray-300 font-sans">Nurturing confidence and high achievement</p>
+                    </div>
+                  </div>
+                  <!-- Slide 5 -->
+                  <div class="w-full h-full shrink-0 relative bg-[#181612] flex items-center justify-center overflow-hidden">
+                    <!-- Blurred background glow -->
+                    <img src="{% static 'images/slide5.jpg' %}" alt="4J Students Wreath of Distinction Glow" class="absolute inset-0 w-full h-full object-cover blur-md opacity-25 scale-105 select-none pointer-events-none">
+                    <!-- Sharp contained image -->
+                    <img src="{% static 'images/slide5.jpg' %}" alt="4J Students Wreath of Distinction" class="relative z-10 max-h-full max-w-full object-contain">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 text-center z-20">
+                      <p class="font-serif font-black text-[10px] text-royal-lightgold tracking-wide uppercase">4J's Educational Academy</p>
+                      <p class="text-[9px] text-gray-300 font-sans">Building foundations of educational excellence</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slider Arrows -->
+                <button id="carousel-prev" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition border border-white/10 active:scale-90 z-20">
+                  <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                </button>
+                <button id="carousel-next" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition border border-white/10 active:scale-90 z-20">
+                  <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+
+                <!-- Indicator Dots -->
+                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20">
+                  <span class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/40 cursor-pointer hover:bg-white transition" data-index="0"></span>
+                  <span class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/40 cursor-pointer hover:bg-white transition" data-index="1"></span>
+                  <span class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/40 cursor-pointer hover:bg-white transition" data-index="2"></span>
+                  <span class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/40 cursor-pointer hover:bg-white transition" data-index="3"></span>
+                  <span class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/40 cursor-pointer hover:bg-white transition" data-index="4"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <!-- Academic Statistics Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="bg-white border border-gray-250/60 p-6 rounded-2xl shadow-sm text-center gold-glow-hover hover:border-amber-400 transition duration-300 animate-fade-in-up-delay-1">
+            <div class="w-10 h-10 bg-amber-500/5 rounded-full flex items-center justify-center mx-auto mb-3">
+              <i class="fa-solid fa-users-rectangle text-royal-gold"></i>
+            </div>
+            <div id="stat-trainers-count" class="text-3xl font-sans-alt font-black text-royal-gold">0</div>
+            <p class="text-xs text-gray-400 uppercase font-bold tracking-wider mt-1">Faculty Subject Instructors</p>
+          </div>
+          <div class="bg-white border border-gray-250/60 p-6 rounded-2xl shadow-sm text-center gold-glow-hover hover:border-amber-400 transition duration-300 animate-fade-in-up-delay-1">
+            <div class="w-10 h-10 bg-amber-500/5 rounded-full flex items-center justify-center mx-auto mb-3">
+              <i class="fa-solid fa-graduation-cap text-royal-gold"></i>
+            </div>
+            <div id="stat-students-count" class="text-3xl font-sans-alt font-black text-royal-gold">0</div>
+            <p class="text-xs text-gray-400 uppercase font-bold tracking-wider mt-1">Mapped Active Student Base</p>
+          </div>
+          <div class="bg-white border border-gray-250/60 p-6 rounded-2xl shadow-sm text-center gold-glow-hover hover:border-amber-400 transition duration-300 animate-fade-in-up-delay-1">
+            <div class="w-10 h-10 bg-amber-500/5 rounded-full flex items-center justify-center mx-auto mb-3">
+              <i class="fa-solid fa-clock-rotate-left text-royal-gold"></i>
+            </div>
+            <div id="stat-batches-count" class="text-3xl font-sans-alt font-black text-royal-gold">0</div>
+            <p class="text-xs text-gray-400 uppercase font-bold tracking-wider mt-1">Active Scheduled Batches</p>
+          </div>
+        </div>
+
+        <!-- UK Class Live Radar Timetable -->
+        <section id="active-radar-section" class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-6 gold-glow-hover animate-fade-in-up-delay-2">
+          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+                <h3 class="font-serif font-black text-lg text-slate-900">Real-Time UK Live Class Radar</h3>
+              </div>
+              <p class="text-xs text-gray-400 mt-1">Timetabled academic batches running in Europe/London Time</p>
+            </div>
+            <div class="bg-amber-600/5 text-amber-900 border border-amber-600/10 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">
+              Today: <span id="radar-day-label" class="font-serif">...</span>
+            </div>
+          </div>
+          
+          <!-- Live Cards Grid (populated by main.js) -->
+          <div id="radar-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamically Rendered items -->
+            <div class="col-span-full py-12 text-center text-xs text-gray-400 font-serif">
+              Loading active Live Radar schedules...
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- 1.b DEDICATED SYLLABUS PAGE PANEL -->
+      <div id="panel-guest-syllabus" class="space-y-6" style="display: none;">
+        <!-- 4J's Instant AI Syllabus Reviewer & Auditor -->
+        <section class="bg-gradient-to-br from-[#FCFAF5]/90 to-white border-2 border-[#d4af37]/45 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
+          <div class="flex items-center gap-3 border-b border-gray-150 pb-4">
+            <div class="w-11 h-11 bg-amber-500/5 border border-amber-500/25 rounded-full flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-square-poll-vertical text-royal-gold text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-serif font-black text-xl text-[#927116] tracking-wide">4J's Instant AI Syllabus Reviewer & Auditor</h3>
+              <p class="text-xs text-slate-400 mt-0.5">Select curriculum parameters to instantly compile a verified UK syllabus spec sheet with exam weightages.</p>
+            </div>
+          </div>
+
+          <!-- Reviewer Inputs Form -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="space-y-1.5">
+              <label for="rev-year" class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Select Academic Year</label>
+              <select id="rev-year" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white font-medium">
+                <option value="Year 3">Year 3</option>
+                <option value="Year 4">Year 4</option>
+                <option value="Year 5">Year 5</option>
+                <option value="Year 6">Year 6</option>
+                <option value="Year 7">Year 7</option>
+                <option value="Year 8">Year 8</option>
+                <option value="Year 9">Year 9</option>
+                <option value="Year 10">Year 10</option>
+                <option value="Year 11">Year 11 (GCSE)</option>
+                <option value="Year 12">Year 12 (AS Level)</option>
+                <option value="Year 13">Year 13 (A Level)</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="rev-board" class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Select Examination Board</label>
+              <select id="rev-board" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white font-medium">
+                <option value="Edexcel">Pearson Edexcel</option>
+                <option value="AQA">AQA</option>
+                <option value="OCR">OCR</option>
+                <option value="CIE">Cambridge CIE</option>
+                <option value="WJEC">WJEC</option>
+                <option value="CCEA">CCEA</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="rev-subject" class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Select Subject Course</label>
+              <select id="rev-subject" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white font-medium">
+                <option value="Maths">Mathematics</option>
+                <option value="English">English Language & Lit</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="Science">Combined Science</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-2">
+            <button id="btn-run-syllabus-audit" class="px-6 py-2.5 bg-gold-gradient shimmer-gold-btn text-white font-serif font-black text-xs uppercase tracking-wider rounded-xl shadow cursor-pointer transition active:scale-95 flex items-center gap-2">
+              <i class="fa-solid fa-wand-magic-sparkles text-xs animate-pulse"></i>
+              Compile Verified AI Spec Sheet
+            </button>
+          </div>
+
+          <!-- Auditor Result Output Panel (populated dynamically) -->
+          <div id="syllabus-reviewer-output" class="hidden border border-[#d4af37]/30 bg-[#FCFAF5]/50 rounded-2xl p-5 sm:p-6 space-y-4 shadow-sm">
+            <!-- Loading state placeholder -->
+            <div id="reviewer-loader" class="hidden py-8 text-center text-xs text-gray-400 font-mono flex items-center justify-center gap-2">
+              <svg class="animate-spin h-4 w-4 text-royal-gold" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>Consulting Qwen AI localized specification core...</span>
+            </div>
+
+            <!-- Content spec sheet -->
+            <div id="reviewer-spec-content" class="space-y-4">
+              <!-- Dynamically rendered custom spec -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 4J's Certified Syllabus & Weightage Matrix -->
+        <section class="bg-white border border-[#d4af37]/35 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+          <div class="flex flex-wrap items-center justify-between border-b border-gray-100 pb-4 gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 bg-[#d37300] rounded-full animate-pulse"></span>
+                <h3 class="font-serif font-black text-xl sm:text-2xl text-[#927116] tracking-wide">4J's Certified Syllabus & Weightage Matrix</h3>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-400 mt-1">Tuition of Distinction syllabus ledger with exam board weightage outlines and verified exam matrices.</p>
+            </div>
+            <div id="syllabus-hub-count-badge" class="bg-amber-600/5 text-amber-900 border border-amber-600/10 px-4 py-1.5 rounded-full text-xs font-mono font-bold uppercase">
+              Curriculum Topics: <span id="syllabus-hub-total-count" class="font-serif font-black">0</span>
+            </div>
+          </div>
+
+          <!-- Interactive Filters Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-4 border-b border-gray-100">
+            <div class="space-y-1.5">
+              <label for="syll-filter-year" class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Select Academic Year</label>
+              <select id="syll-filter-year" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+                <option value="All">All Years (Year 3 to 13)</option>
+                <option value="Year 3">Year 3</option>
+                <option value="Year 4">Year 4</option>
+                <option value="Year 5">Year 5</option>
+                <option value="Year 6">Year 6</option>
+                <option value="Year 7">Year 7</option>
+                <option value="Year 8">Year 8</option>
+                <option value="Year 9">Year 9</option>
+                <option value="Year 10">Year 10</option>
+                <option value="Year 11">Year 11</option>
+                <option value="Year 12">Year 12</option>
+                <option value="Year 13">Year 13</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="syll-filter-board" class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Select Examination Board</label>
+              <select id="syll-filter-board" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+                <option value="All">All Boards</option>
+                <option value="GCSE">GCSE</option>
+                <option value="Edexcel">Edexcel</option>
+                <option value="AQA">AQA</option>
+                <option value="OCR">OCR</option>
+                <option value="CIE">Cambridge CIE</option>
+                <option value="WJEC">WJEC</option>
+                <option value="CCEA">CCEA</option>
+                <option value="GCSE Mapped">GCSE Mapped</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="syll-filter-subject" class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Select Subject</label>
+              <select id="syll-filter-subject" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+                <option value="All">All Subjects</option>
+                <option value="Maths">Maths</option>
+                <option value="English">English</option>
+                <option value="Science">Science</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="Mechanics">Mechanics</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Dynamic Syllabus scroll list -->
+          <div id="syllabus-hub-scroll-container" class="max-h-[500px] overflow-y-auto pr-2 space-y-4 divide-y divide-gray-100">
+            <!-- Dynamically populated list elements inside JS -->
+            <div class="py-12 text-center text-xs sm:text-sm text-gray-400 font-serif">
+              Loading national curriculum syllabus...
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 1.b GCSE/EDEXCEL WORKSHEETS RESOURCE DIRECTORY -->
+      <div id="panel-guest-resources" class="space-y-6" style="display: none;">
+        
+        <!-- Search and Filter Panel -->
+        <div class="bg-white border border-gray-250/60 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="w-full md:w-1/3 relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+            <input type="text" id="res-search-input" placeholder="Search GCSE/Edexcel files..." class="w-full pl-9 pr-4 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+          </div>
+          
+          <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            <select id="filter-year" class="px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+              <option value="All">All Academic Years</option>
+              <option value="Year 2">Year 2</option>
+              <option value="Year 3">Year 3</option>
+              <option value="Year 4">Year 4</option>
+              <option value="Year 5">Year 5</option>
+              <option value="Year 6">Year 6</option>
+              <option value="Year 7">Year 7</option>
+              <option value="Year 8">Year 8</option>
+              <option value="Year 9">Year 9</option>
+              <option value="Year 10">Year 10</option>
+              <option value="Year 11">Year 11</option>
+              <option value="Year 12">Year 12</option>
+              <option value="Year 13">Year 13</option>
+            </select>
+
+            <select id="filter-subject" class="px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+              <option value="All">All Subjects</option>
+              <option value="Maths">Maths</option>
+              <option value="Physics">Physics</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="Biology">Biology</option>
+              <option value="English">English</option>
+              <option value="Science">Science</option>
+              <option value="Mechanics">Mechanics</option>
+            </select>
+
+            <button id="btn-download-all-zip" class="ml-auto px-4 py-2 bg-royal-onyx hover:bg-black text-white text-xs font-bold rounded-xl transition flex items-center gap-2">
+              <i class="fa-solid fa-file-zipper text-amber-400"></i>
+              Download All ZIP Bundle
+            </button>
+          </div>
+        </div>
+
+        <!-- Resources Breadcrumbs Bar -->
+        <div id="resources-breadcrumbs-bar" class="px-4 py-2.5 bg-amber-500/5 border border-amber-500/10 rounded-2xl flex items-center gap-2 text-xs font-serif font-bold text-royal-gold">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Resources Cards Grid -->
+        <div id="resources-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Dynamically populated -->
+        </div>
+
+      </div>
+
+      <!-- 1.c DOCUMENT WATERMARK PURIFIER -->
+      <div id="panel-guest-purifier" class="space-y-6" style="display: none;">
+        
+        <!-- Header -->
+        <div class="text-center max-w-xl mx-auto space-y-2">
+          <div class="w-12 h-12 bg-amber-500/5 border border-amber-500/25 rounded-full flex items-center justify-center mx-auto">
+            <i class="fa-solid fa-wand-magic-sparkles text-royal-gold text-lg"></i>
+          </div>
+          <h3 class="font-serif font-black text-xl text-slate-900">4J Custom Watermark Purifier Engine</h3>
+          <p class="text-xs text-gray-400">Upload worksheets with third-party watermarks to erase them and stamp with certified royal academy crests instantly</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+          
+          <!-- Input Controls & Dragzone -->
+          <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-6 lg:col-span-1">
+            <div class="space-y-2">
+              <label class="block text-xs uppercase font-bold text-gray-400 tracking-wider">Target Watermark String to Erase</label>
+              <input type="text" id="purifier-target-phrase" value="Theos Educational Academy" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-sm focus:ring-1 focus:ring-amber-500 focus:outline-none">
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-xs uppercase font-bold text-gray-400 tracking-wider">Select Layout Document File</label>
+              
+              <!-- Dropzone -->
+              <div id="purifier-drop-zone" class="border-2 border-dashed border-gray-250 rounded-2xl p-6 text-center cursor-pointer hover:border-amber-500 hover:bg-amber-500/5 transition group">
+                <input type="file" id="purifier-file-input" class="hidden" accept=".pdf,.docx,.pptx">
+                <div class="w-10 h-10 bg-amber-500/5 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-105 transition">
+                  <i class="fa-solid fa-cloud-arrow-up text-royal-gold"></i>
+                </div>
+                <h4 id="dropped-file-title" class="text-sm font-serif font-black text-[#927116]">No file uploaded</h4>
+                <p id="dropped-file-subtitle" class="text-xs text-gray-400 mt-1">Drag PDF, DOCX, or PPTX here</p>
+              </div>
+            </div>
+
+            <!-- Trigger Button -->
+            <button id="btn-trigger-purify" class="w-full py-2.5 bg-gold-gradient shimmer-gold-btn text-royal-onyx font-serif font-black text-sm uppercase tracking-wider rounded-xl shadow cursor-pointer transition active:scale-95 hidden">
+              <span id="purifier-button-text">Purify File Layout</span>
+            </button>
+            
+            <!-- Dev console logs -->
+            <div id="purifier-logs-console" class="hidden p-3.5 bg-slate-900 border border-slate-800 rounded-xl font-mono text-[9px] text-emerald-400 overflow-y-auto max-h-[160px] space-y-1">
+              <!-- Logs populated -->
+            </div>
+          </div>
+
+          <!-- Interactive Before & After Visual Preview Panel -->
+          <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4 lg:col-span-2">
+            <h4 class="font-serif font-black text-xs text-slate-800 uppercase tracking-wide">Interactive Purifier Visual Preview Canvas</h4>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
+              <!-- Original Watermarked Layout (Before) -->
+              <div class="border border-red-200 bg-red-500/5 rounded-2xl p-5 relative overflow-hidden h-64 flex flex-col justify-between">
+                <div class="absolute inset-0 pointer-events-none watermark-overlay rotate-12 flex items-center justify-center opacity-30 select-none">
+                  <span id="before-watermark-overlay" class="font-sans font-black text-red-500/20 text-xs tracking-wider uppercase whitespace-pre">Theos Educational Academy</span>
+                </div>
+                
+                <div class="relative z-10">
+                  <span class="px-2 py-0.5 bg-red-100 text-red-700 font-bold font-mono text-[8px] uppercase tracking-wider rounded">Original Input</span>
+                  <h4 class="font-serif text-slate-700 text-xs mt-3 leading-relaxed">Year 11 GCSE Worksheet.docx</h4>
+                  <p class="text-[10px] text-gray-400 mt-1">Contains default third-party organization text watermarks across pages.</p>
+                </div>
+                
+                <div class="relative z-10 flex items-center gap-1.5 text-[10px] text-red-600 font-bold font-mono">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                  <span>Unpurified Version</span>
+                </div>
+              </div>
+
+              <!-- Cleaned Certified Layout (After) -->
+              <div id="after-view-box" class="border border-gray-200 bg-gray-50/50 opacity-40 rounded-2xl p-5 relative overflow-hidden h-64 flex flex-col justify-between transition duration-500">
+                <!-- Cert badge -->
+                <div id="preview-certified-badge" class="hidden absolute top-4 right-4 bg-emerald-500 text-emerald-950 font-sans font-black text-[8px] tracking-wider uppercase px-2 py-0.5 rounded shadow">
+                  Certified Purified
+                </div>
+
+                <div class="relative z-10 flex-grow flex flex-col justify-between">
+                  <div>
+                    <span class="px-2 py-0.5 bg-amber-500 text-amber-950 font-serif font-black text-[8px] uppercase tracking-wider rounded">Purified Output</span>
+                    
+                    <!-- Content placeholder -->
+                    <div id="after-placeholder-content" class="py-12 text-center text-[10px] text-gray-400 font-serif">
+                      Awaiting clean engine run...
+                    </div>
+
+                    <!-- Clean content details -->
+                    <div id="after-active-content" class="hidden mt-3 space-y-2">
+                      <div id="after-gold-crest" class="hidden flex items-center gap-2 text-royal-gold">
+                        <i class="fa-solid fa-crown text-xs"></i>
+                        <span class="font-serif font-black text-[10px] tracking-widest uppercase">4J'S CERTIFIED</span>
+                      </div>
+                      <h4 class="font-serif text-amber-950 font-bold text-xs">Certified Classroom Worksheet</h4>
+                      <p class="text-[9px] text-gray-500">Third-party watermarks permanently expunged. Re-stamped with Academy Crown.</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-1.5 text-[10px] text-emerald-600 font-bold font-mono">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Cleaned & Certified</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Download Button -->
+            <div class="pt-3 border-t border-gray-50 flex justify-end">
+              <button id="btn-download-purified" disabled class="px-6 py-2.5 bg-gray-200 text-gray-400 font-serif font-black text-xs uppercase tracking-wider rounded-xl shadow cursor-not-allowed transition">
+                Purification Pending
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ==================== 2. TRAINER PORTAL WORKSPACE ==================== -->
+    <div id="trainer-workspace" class="space-y-6" style="display: none;">
+      
+      <!-- Welcome Profile Header Banner -->
+      <div class="bg-gradient-to-r from-amber-600 to-amber-750 p-6 rounded-3xl text-white shadow border border-amber-500/20 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-chalkboard-user text-amber-300"></i>
+            <span class="text-[9px] uppercase tracking-widest font-mono text-amber-200 font-bold">Faculty Portal Workspace</span>
+          </div>
+          <h2 id="trainer-fullname-heading" class="font-serif font-black text-2xl mt-1">Trainer Fullname</h2>
+          <p class="text-[10px] text-amber-100 font-mono mt-0.5">Assigned profile: <span id="trainer-email-span">tutor@4j.com</span></p>
+        </div>
+        
+        <div class="bg-white/10 border border-white/20 rounded-2xl px-5 py-3 text-center">
+          <div class="text-[9px] text-amber-200 uppercase font-mono tracking-wider font-bold">LMS Certification</div>
+          <div class="text-xl font-sans-alt font-black mt-0.5 text-amber-200">Grade A Standard</div>
+        </div>
+      </div>
+
+      <!-- Subtabs menu -->
+      <div class="flex justify-center sm:justify-start gap-3 mb-4">
+        <button id="btn-trainer-timesheet" class="px-3.5 py-1.5 text-xs font-serif font-bold uppercase rounded-lg border transition bg-amber-600 text-white border-amber-600 shadow-sm">
+          Interactive Timesheet Ledger
+        </button>
+        <button id="btn-trainer-syllabus" class="px-3.5 py-1.5 text-xs font-serif font-bold uppercase rounded-lg border transition bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
+          Syllabus Checklists
+        </button>
+        <button id="btn-trainer-qwen" class="px-3.5 py-1.5 text-xs font-serif font-bold uppercase rounded-lg border transition bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
+          Ollama Qwen AI Tutor
+        </button>
+      </div>
+
+      <!-- 2.a INTERACTIVE TIMESHEET LEDGER -->
+      <div id="panel-trainer-timesheet" class="space-y-6">
+        
+        <!-- Shift logging inputs form & metric summary totals card -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+          
+          <!-- Shift Logger Box -->
+          <div class="bg-white border border-gray-250/60 p-6 rounded-3xl shadow-sm space-y-4 flex flex-col justify-between lg:col-span-2">
+            <h3 class="font-serif font-black text-xs text-slate-800 uppercase tracking-wider border-b border-gray-50 pb-2">Log Tuition Session</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-4">
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Date of Session</label>
+                <input type="date" id="time-log-date" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+              
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Class Subject / Topic</label>
+                <input type="text" id="time-log-subject" placeholder="e.g. Year 12 mechanics maths" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Start Time (UK)</label>
+                <input type="time" id="time-log-start" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">End Time (UK)</label>
+                <input type="time" id="time-log-end" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Hours</label>
+                <input type="number" step="0.5" id="time-log-hours" value="1.0" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 mt-4">
+              <button id="btn-fill-suggested-shift" class="px-4 py-2 border border-amber-400/35 hover:bg-amber-500/5 text-amber-900 font-serif font-bold text-[10px] uppercase rounded-xl transition">
+                Autofill Suggested Shift
+              </button>
+              <button id="btn-add-timesheet-row" class="ml-auto px-5 py-2 bg-royal-onyx hover:bg-black text-white font-serif font-black text-xs uppercase tracking-wider rounded-xl transition shadow active:scale-95">
+                Add Session Logs
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats compiled card (26th to 25th boundaries) -->
+          <div class="bg-gradient-to-br from-amber-500/5 to-white border border-amber-300 rounded-3xl p-6 shadow-sm flex flex-col justify-between lg:col-span-1">
+            <div>
+              <span class="px-2 py-0.5 bg-amber-500/10 border border-amber-400/30 text-amber-900 font-bold font-mono text-[8px] uppercase tracking-wider rounded">Payroll Cycle Active</span>
+              <h4 class="font-serif font-black text-sm text-slate-900 mt-2">Active Session Calculations</h4>
+              <p class="text-[9px] text-gray-400 mt-0.5">Calculates automatic day schedules from the 26th to 25th of next month.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 border-t border-b border-gray-100 py-3 my-4">
+              <div>
+                <span class="text-[9px] text-gray-400 font-bold uppercase">Total Hours</span>
+                <div class="text-xl font-sans-alt font-black text-royal-gold mt-0.5"><span id="metric-timesheet-hours">0.0</span> <span class="text-[10px] text-gray-400 font-normal">hrs</span></div>
+              </div>
+              <div>
+                <span class="text-[9px] text-gray-400 font-bold uppercase">Total Lessons</span>
+                <div class="text-xl font-sans-alt font-black text-royal-gold mt-0.5"><span id="metric-timesheet-lessons">0</span></div>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <button id="btn-timesheet-download" class="w-full py-2.5 bg-royal-onyx hover:bg-black text-white font-serif font-black text-xs uppercase tracking-wider rounded-xl transition shadow active:scale-95 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-excel text-amber-400"></i>
+                Download Spreadsheet (.XLS)
+              </button>
+              <button id="btn-timesheet-print" class="w-full py-2 border border-amber-500 hover:bg-amber-500/5 text-amber-950 font-serif font-black text-xs uppercase tracking-wider rounded-xl cursor-pointer transition active:scale-95 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-print"></i>
+                Print Timesheet Invoice
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Spreadsheet ledger table -->
+        <section class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-gray-50 pb-3">
+            <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide">Interactive Excel Billing Ledger</h3>
+            <span class="text-[9.5px] text-gray-400">All shifts listed are certified. Use the spreadsheet downloader or print tool.</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border border-gray-250/65 rounded-xl border-collapse">
+              <thead>
+                <tr class="bg-slate-50 text-gray-500 uppercase tracking-wider font-bold border-b border-gray-300">
+                  <th rowspan="2" class="p-3 border-r border-gray-350 text-center font-serif bg-slate-50">Date</th>
+                  <th colspan="2" class="p-2 border-r border-gray-250 text-center bg-amber-500/5 text-amber-950 font-serif font-bold">Lesson 1</th>
+                  <th colspan="2" class="p-2 border-r border-gray-250 text-center bg-amber-500/5 text-amber-950 font-serif font-bold">Lesson 2</th>
+                  <th colspan="2" class="p-2 border-r border-gray-250 text-center bg-amber-500/5 text-amber-950 font-serif font-bold">Lesson 3</th>
+                  <th colspan="2" class="p-2 border-r border-gray-250 text-center bg-amber-500/5 text-amber-950 font-serif font-bold">Lesson 4</th>
+                  <th rowspan="2" class="p-3 border-r border-gray-350 text-center font-serif bg-slate-50">Total Lessons</th>
+                  <th rowspan="2" class="p-3 text-center font-serif bg-slate-50">Total Hours</th>
+                </tr>
+                <tr class="bg-slate-50 text-gray-400 uppercase tracking-wider font-bold border-b border-gray-300 text-[9px]">
+                  <th class="p-2 border-r border-gray-250">Subject (Time)</th>
+                  <th class="p-2 border-r border-gray-250 text-center">Length</th>
+                  <th class="p-2 border-r border-gray-250">Subject (Time)</th>
+                  <th class="p-2 border-r border-gray-250 text-center">Length</th>
+                  <th class="p-2 border-r border-gray-250">Subject (Time)</th>
+                  <th class="p-2 border-r border-gray-250 text-center">Length</th>
+                  <th class="p-2 border-r border-gray-250">Subject (Time)</th>
+                  <th class="p-2 border-r border-gray-250 text-center">Length</th>
+                </tr>
+              </thead>
+              <tbody id="timesheet-excel-rows">
+                <!-- Populated dynamically -->
+                <tr>
+                  <td colspan="11" class="py-8 text-center text-gray-400">Loading interactive logs...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================== TUTOR INVOICE PRINTED LAYOUT (Hidden on screen, shown in print) ==================== -->
+        <div class="print-header">
+          <div class="print-header-brand">4J'S EDUCATIONAL ACADEMY</div>
+          <div class="print-header-details">
+            <p><strong>OFFICIAL INSTRUCTOR TIMESHEET INVOICE</strong></p>
+            <p>Instructor Faculty: <span id="print-tutor-name" class="font-bold"></span></p>
+            <p>Email Registered: <span id="print-tutor-email"></span></p>
+            <p>Academy Payroll Standard: 26th to 25th Cycle</p>
+          </div>
+        </div>
+
+        <table class="w-full border-collapse border border-black my-6 print-table hidden">
+          <thead>
+            <tr style="background-color: #f8fafc; border-bottom: 2px solid #000;">
+              <th rowspan="2" style="padding: 6px; border: 1px solid #000; text-align: center; font-family: serif;">Date</th>
+              <th colspan="2" style="padding: 6px; border: 1px solid #000; text-align: center; font-family: serif;">Lesson 1</th>
+              <th colspan="2" style="padding: 6px; border: 1px solid #000; text-align: center; font-family: serif;">Lesson 2</th>
+              <th colspan="2" style="padding: 6px; border: 1px solid #000; text-align: center; font-family: serif;">Lesson 3</th>
+              <th colspan="2" style="padding: 6px; border: 1px solid #000; text-align: center; font-family: serif;">Lesson 4</th>
+              <th rowspan="2" style="padding: 6px; border: 1px solid #000; text-align: center; font-family: serif;">Total Lessons</th>
+              <th rowspan="2" style="padding: 6px; border: 1px solid #000; text-align: center; font-family: serif;">Total Hours</th>
+            </tr>
+            <tr style="background-color: #f8fafc; font-size: 8pt;">
+              <th style="padding: 4px; border: 1px solid #000; text-align: left;">Subject (Time)</th>
+              <th style="padding: 4px; border: 1px solid #000; text-align: center; width: 50px;">Hours</th>
+              <th style="padding: 4px; border: 1px solid #000; text-align: left;">Subject (Time)</th>
+              <th style="padding: 4px; border: 1px solid #000; text-align: center; width: 50px;">Hours</th>
+              <th style="padding: 4px; border: 1px solid #000; text-align: left;">Subject (Time)</th>
+              <th style="padding: 4px; border: 1px solid #000; text-align: center; width: 50px;">Hours</th>
+              <th style="padding: 4px; border: 1px solid #000; text-align: left;">Subject (Time)</th>
+              <th style="padding: 4px; border: 1px solid #000; text-align: center; width: 50px;">Hours</th>
+            </tr>
+          </thead>
+          <tbody id="print-invoice-tbody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+
+        <div class="print-invoice-summary text-right border-t-2 border-black pt-4 hidden">
+          <p>Total lessons logged: <strong id="print-total-lessons">0</strong> sessions</p>
+          <p>Total billable course hours compiled: <strong id="print-total-hours">0.0</strong> hrs</p>
+        </div>
+
+        <div class="print-footer-signature justify-between mt-12 hidden">
+          <div>
+            <p class="mb-10">Tutor Signature:</p>
+            <div class="print-signature-line border-t border-black w-48 text-center pt-1 mt-4">Faculty Specialist</div>
+          </div>
+          <div>
+            <p class="mb-10">4J Registrar Review:</p>
+            <div class="print-signature-line border-t border-black w-48 text-center pt-1 mt-4">Authorized Signature & Seal</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 2.b SYLLABUS CHECKLISTS -->
+      <div id="panel-trainer-syllabus" class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4" style="display: none;">
+        <div>
+          <h3 class="font-serif font-black text-lg text-slate-900">Instructors Board syllabus checkpoints</h3>
+          <p class="text-xs text-gray-400 mt-1">Review active syllabus modules. Click options to directly update modules check status on the public ledger.</p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="border-b border-gray-200 text-gray-400 uppercase tracking-wider font-bold">
+                <th class="pb-3 font-serif">Board</th>
+                <th class="pb-3">Year</th>
+                <th class="pb-3">Subject</th>
+                <th class="pb-3">Topic Theme</th>
+                <th class="pb-3">Subtopic Detail</th>
+                <th class="pb-3">Status</th>
+                <th class="pb-3 text-right">Actions Checklist</th>
+              </tr>
+            </thead>
+            <tbody id="trainer-syllabus-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2.c OLLAMA QWEN AI TUTOR CHATBOT -->
+      <div id="panel-trainer-qwen" class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-6" style="display: none;">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-gray-50 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-amber-500/5 border border-amber-500/25 rounded-full flex items-center justify-center">
+              <i class="fa-solid fa-robot text-royal-gold text-lg animate-bounce"></i>
+            </div>
+            <div>
+              <h3 class="font-serif font-black text-sm text-slate-900">4J Ollama Qwen AI Tutor proxy</h3>
+              <p class="text-[10px] text-gray-400 mt-0.5">High-fidelity localized AI engine mapped with GCSE, AQA, Edexcel, OCR, CIE, WJEC, CCEA curriculum structures</p>
+            </div>
+          </div>
+          <span class="text-[9.5px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-mono font-bold animate-pulse">SYSTEM STABLE</span>
+        </div>
+
+        <!-- Quick prompt chips helper -->
+        <div class="space-y-2">
+          <span class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Quick syllabus helper queries</span>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn-chat-prompt px-3 py-1.5 bg-slate-50 border border-gray-200 hover:border-amber-400 rounded-xl text-[10px] font-medium text-slate-800 transition">
+              Explain GCSE digestion biology
+            </button>
+            <button class="btn-chat-prompt px-3 py-1.5 bg-slate-50 border border-gray-200 hover:border-amber-400 rounded-xl text-[10px] font-medium text-slate-800 transition">
+              Solve SUVAT mechanics equations
+            </button>
+            <button class="btn-chat-prompt px-3 py-1.5 bg-slate-50 border border-gray-200 hover:border-amber-400 rounded-xl text-[10px] font-medium text-slate-800 transition">
+              Compare Edexcel English writing rubrics
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages balloons stream -->
+        <div id="chat-messages-container" class="flex flex-col gap-3 overflow-y-auto max-h-[360px] min-h-[220px] border border-gray-250/65 rounded-2xl p-4 bg-slate-50/50">
+          
+          <!-- Default AI Greeting -->
+          <div class="flex justify-start">
+            <div class="max-w-[85%] rounded-2xl p-4 leading-relaxed font-sans bg-amber-500/5 text-amber-950 rounded-tl-none border border-amber-150">
+              Welcome to the 4J AI Tutor proxy portal. I am linked directly with local Ollama Qwen models, mapped with detailed GCSE, Edexcel, AQA, OCR, CIE, WJEC, and CCEA syllabus objectives, and fully cross-referenced with official, verified specification platforms (Pearson Edexcel, AQA, OCR, Cambridge CIE, WJEC, and CCEA). 
+              <br><br>
+              How can I assist you with lesson plans, equation breakdowns, or syllabus objectives today?
+            </div>
+          </div>
+
+          <!-- Thinking bubble -->
+          <div id="chat-thinking-bubble" class="hidden flex justify-start">
+            <div class="bg-amber-500/5 text-amber-950 rounded-2xl rounded-tl-none border border-amber-150 p-4 font-mono text-[10px] flex items-center gap-2">
+              <svg class="animate-spin h-3.5 w-3.5 text-royal-gold" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>Consulting Ollama Qwen localized tutor core...</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Message Input bar submit -->
+        <form id="chat-message-form" class="flex items-center gap-2">
+          <input type="text" id="chat-query-input" placeholder="Type curriculum questions, maths issues, biology topics..." class="flex-1 px-4 py-2.5 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+          <button type="submit" class="px-5 py-2.5 bg-royal-onyx hover:bg-black text-white font-serif font-black text-xs uppercase tracking-wider rounded-xl transition shadow">
+            Ask Qwen
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+
+    <!-- ==================== 3. ADMIN PORTAL WORKSPACE ==================== -->
+    <div id="admin-workspace" class="space-y-6" style="display: none;">
+      
+      <!-- Metrics bar -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-white border border-gray-250/60 p-4 rounded-2xl shadow-sm text-center">
+          <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Instructors Registrar Size</div>
+          <div id="admin-stat-trainers" class="text-2xl font-sans-alt font-black text-royal-gold mt-1">0</div>
+        </div>
+        <div class="bg-white border border-gray-250/60 p-4 rounded-2xl shadow-sm text-center flex flex-col justify-center items-center">
+          <label for="admin-input-students" class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1 cursor-pointer">Managed Student Count</label>
+          <input type="number" id="admin-input-students" class="text-center w-24 bg-slate-50 border border-gray-200 rounded px-2 py-0.5 text-base font-sans-alt font-black text-royal-gold focus:outline-none focus:ring-1 focus:ring-amber-500">
+        </div>
+        <div class="bg-white border border-gray-250/60 p-4 rounded-2xl shadow-sm text-center">
+          <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Scheduled Timetabled Batches</div>
+          <div id="admin-stat-slots" class="text-2xl font-sans-alt font-black text-royal-gold mt-1">0</div>
+        </div>
+      </div>
+
+      <!-- Academy Profile Configurator & Save -->
+      <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4">
+        <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide">Customize Academy profile about text</h3>
+        
+        <textarea id="admin-about-textbox" rows="3" class="w-full p-4 border border-gray-250 rounded-2xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none" placeholder="Provide detailed academy history description..."></textarea>
+        
+        <div class="flex justify-end">
+          <button id="btn-save-admin-about" class="px-5 py-2 bg-royal-onyx hover:bg-black text-white font-serif font-black text-xs uppercase tracking-wider rounded-xl transition shadow">
+            Save Academy Profile Settings
+          </button>
+        </div>
+      </div>
+
+      <!-- Trainer Profiles Register Registrar -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        
+        <!-- Registration Form -->
+        <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4">
+          <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide border-b border-gray-50 pb-2">Register New Specialist Trainer</h3>
+          
+          <form id="admin-trainer-form" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Full Name</label>
+                <input type="text" id="reg-trainer-name" required placeholder="e.g. Stephen Riaz" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Email Address</label>
+                <input type="email" id="reg-trainer-email" required placeholder="e.g. stephen@4j.com" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Assigned Login Password</label>
+                <input type="password" id="reg-trainer-password" required placeholder="••••••••" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Hourly Pay Rate (£/hr)</label>
+                <input type="number" id="reg-trainer-rate" required step="1" value="45" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Select Authorized Course Subjects</label>
+              <div class="grid grid-cols-3 gap-2">
+                <label class="flex items-center gap-2 p-2 bg-slate-50 hover:bg-amber-500/5 rounded-xl border border-gray-200 cursor-pointer text-[10px]">
+                  <input type="checkbox" id="reg-sub-maths" class="accent-amber-600">
+                  <span>Maths</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 bg-slate-50 hover:bg-amber-500/5 rounded-xl border border-gray-200 cursor-pointer text-[10px]">
+                  <input type="checkbox" id="reg-sub-physics" class="accent-amber-600">
+                  <span>Physics</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 bg-slate-50 hover:bg-amber-500/5 rounded-xl border border-gray-200 cursor-pointer text-[10px]">
+                  <input type="checkbox" id="reg-sub-chemistry" class="accent-amber-600">
+                  <span>Chemistry</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 bg-slate-50 hover:bg-amber-500/5 rounded-xl border border-gray-200 cursor-pointer text-[10px]">
+                  <input type="checkbox" id="reg-sub-biology" class="accent-amber-600">
+                  <span>Biology</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 bg-slate-50 hover:bg-amber-500/5 rounded-xl border border-gray-200 cursor-pointer text-[10px]">
+                  <input type="checkbox" id="reg-sub-english" class="accent-amber-600">
+                  <span>English</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 bg-slate-50 hover:bg-amber-500/5 rounded-xl border border-gray-200 cursor-pointer text-[10px]">
+                  <input type="checkbox" id="reg-sub-mechanics" class="accent-amber-600">
+                  <span>Mechanics</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button type="submit" class="px-5 py-2.5 bg-royal-onyx hover:bg-black text-white font-serif font-black text-xs uppercase tracking-wider rounded-xl transition shadow">
+                Register Trainer Profile
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Trainers Directory list -->
+        <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4">
+          <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide border-b border-gray-50 pb-2">Active Instructors Directory</h3>
+          
+          <div id="admin-trainers-list-box" class="flex flex-col gap-3 max-h-[380px] overflow-y-auto pr-1">
+            <!-- Populated via JS -->
+            <div class="text-center text-gray-400 py-8 text-xs font-serif">Loading faculty list...</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Schedule management timetable editor -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        
+        <!-- Add Class Schedule Form -->
+        <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4 lg:col-span-1">
+          <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide border-b border-gray-50 pb-2">Schedule Class Batches</h3>
+          
+          <form id="admin-sched-form" class="space-y-4">
+            <div class="space-y-1">
+              <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Instructor Specialist</label>
+              <select id="sched-trainer-picker" required class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+                <option value="">-- Choose Instructor --</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Day of Week</label>
+                <select id="sched-day" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+                  <option>Monday</option>
+                  <option>Tuesday</option>
+                  <option>Wednesday</option>
+                  <option>Thursday</option>
+                  <option>Friday</option>
+                  <option>Saturday</option>
+                  <option>Sunday</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Year Level Mapped</label>
+                <select id="sched-year" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+                  <option>Year 3</option>
+                  <option>Year 4</option>
+                  <option>Year 5</option>
+                  <option>Year 6</option>
+                  <option>Year 7</option>
+                  <option>Year 8</option>
+                  <option>Year 9</option>
+                  <option>Year 10</option>
+                  <option>Year 11</option>
+                  <option>Year 12</option>
+                  <option>Year 13</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Start Time (UK)</label>
+                <input type="time" id="sched-start" required class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+              <div class="space-y-1">
+                <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">End Time (UK)</label>
+                <input type="time" id="sched-end" required class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Course Subject</label>
+              <input type="text" id="sched-subject" required placeholder="e.g. Pure Mechanics Maths" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Topic Focus Description</label>
+              <input type="text" id="sched-desc" placeholder="e.g. SUVAT, kinematics, equations" class="w-full px-3 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+            </div>
+
+            <button type="submit" class="w-full py-2.5 bg-royal-onyx hover:bg-black text-white font-serif font-black text-xs uppercase tracking-wider rounded-xl transition shadow">
+              Schedule Scheduled Session
+            </button>
+          </form>
+        </div>
+
+        <!-- Timetable Live list -->
+        <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4 lg:col-span-2">
+          <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide border-b border-gray-50 pb-2">Active Timetable Blocks Checklist</h3>
+          
+          <div class="overflow-x-auto max-h-[380px] overflow-y-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-gray-250 text-gray-400 font-bold uppercase tracking-wider">
+                  <th class="pb-3 font-serif">Day</th>
+                  <th class="pb-3">Instructor</th>
+                  <th class="pb-3">Year</th>
+                  <th class="pb-3">Subject Course</th>
+                  <th class="pb-3 font-mono">Time Frame (UK)</th>
+                  <th class="pb-3 text-right">Delete Slot</th>
+                </tr>
+              </thead>
+              <tbody id="admin-timetable-tbody">
+                <!-- Populated via JS -->
+                <tr>
+                  <td colspan="6" class="py-8 text-center text-gray-400">Loading scheduled timetable blocks...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ==================== 4. LIGHTWEIGHT SLIGHTLY DETACHED LOGIN MODAL/CARD ==================== -->
+    <div id="login-modal" class="fixed inset-0 bg-royal-onyx/35 backdrop-blur-sm z-40 items-center justify-center flex hidden">
+      <div class="bg-white border border-royal-lightgold/35 rounded-3xl p-6 sm:p-8 max-w-sm w-full mx-4 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+        
+        <div class="text-center space-y-2 mb-6">
+          <div class="w-10 h-10 bg-amber-500/5 border border-amber-500/25 rounded-full flex items-center justify-center mx-auto">
+            <i class="fa-solid fa-lock text-royal-gold"></i>
+          </div>
+          <h3 class="font-serif font-black text-lg text-slate-900">4J LMS Secure Access Portal</h3>
+          <p class="text-[10px] text-gray-400">Sign in with email and authorized login passcode details</p>
+        </div>
+
+        <form id="login-form-submit" class="space-y-4">
+          <div class="space-y-1">
+            <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Authorized Email Address</label>
+            <input type="email" id="login-email-input" required placeholder="tutor@4j.com" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Passcode Key</label>
+            <input type="password" id="login-password-input" required placeholder="••••••••" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+          </div>
+
+          <!-- Alert error message -->
+          <div id="login-alert-box" class="hidden text-[10px] text-red-700 bg-red-50 border border-red-200/50 p-2.5 rounded-xl font-bold flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Invalid credentials. Please consult Academy Registrar.</span>
+          </div>
+
+          <button type="submit" class="w-full py-2.5 bg-gold-gradient text-royal-onyx font-serif font-black text-xs uppercase tracking-wider rounded-xl shadow cursor-pointer transition active:scale-95">
+            Authenticate Access
+          </button>
+        </form>
+
+        <div class="text-center mt-5">
+          <p class="text-[9.5px] text-gray-400 font-mono">Certified UK standard education lms server key</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== 5. PREMIUM SYLLABUS SPEC & WEIGHTAGE MODAL ==================== -->
+    <div id="syllabus-spec-modal" class="fixed inset-0 bg-royal-onyx/40 backdrop-blur-sm z-50 items-center justify-center flex hidden">
+      <div class="bg-white border-2 border-royal-lightgold/50 rounded-3xl p-6 sm:p-8 max-w-xl w-full mx-4 shadow-2xl relative animate-in fade-in zoom-in duration-300 max-h-[85vh] overflow-y-auto space-y-5">
+        
+        <!-- Header -->
+        <div class="flex items-start justify-between border-b border-gray-100 pb-3.5">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-amber-500/5 border border-amber-500/25 rounded-full flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-crown text-royal-gold"></i>
+            </div>
+            <div>
+              <h3 id="spec-modal-topic" class="font-serif font-black text-base sm:text-lg text-slate-900 leading-snug">Topic Name</h3>
+              <p id="spec-modal-subtitle" class="text-[9.5px] sm:text-[10px] text-gray-400 mt-0.5 uppercase tracking-wider font-mono">Academic Year • Exam Board Specification</p>
+            </div>
+          </div>
+          <button onclick="closeSyllabusSpecModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold p-1 cursor-pointer focus:outline-none transition leading-none">&times;</button>
+        </div>
+
+        <!-- Spec content details card -->
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-amber-500/5 border border-amber-500/10 p-3.5 rounded-2xl">
+              <span class="text-[9px] text-gray-400 uppercase font-bold tracking-wider block font-sans">Exam Weightage</span>
+              <div id="spec-modal-weightage" class="text-xs sm:text-sm font-sans-alt font-black text-royal-gold mt-0.5">High Weightage (8-12%)</div>
+            </div>
+            <div class="bg-amber-500/5 border border-amber-500/10 p-3.5 rounded-2xl">
+              <span class="text-[9px] text-gray-400 uppercase font-bold tracking-wider block font-sans">Target Mark Range</span>
+              <div id="spec-modal-marks" class="text-xs sm:text-sm font-sans-alt font-black text-royal-gold mt-0.5">4 - 6 Marks</div>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <h4 class="font-serif font-bold text-xs text-slate-800 uppercase tracking-wide">Core Syllabus Description</h4>
+            <p id="spec-modal-description" class="text-xs text-slate-650 leading-relaxed bg-[#FCFAF5] p-3.5 border border-[#d4af37]/20 rounded-xl font-medium">
+              Syllabus guide description details here...
+            </p>
+          </div>
+
+          <div class="space-y-1.5">
+            <h4 class="font-serif font-bold text-xs text-slate-800 uppercase tracking-wide">Expert Tuition Strategy</h4>
+            <p id="spec-modal-strategy" class="text-xs text-slate-650 leading-relaxed bg-slate-50 p-3.5 border border-gray-200 rounded-xl font-medium">
+              Tuition strategies here...
+            </p>
+          </div>
+
+          <div class="space-y-1.5">
+            <h4 class="font-serif font-bold text-xs text-slate-800 uppercase tracking-wide">Verified Learning Resources</h4>
+            <div class="flex flex-wrap gap-2 pt-0.5">
+              <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 font-mono font-bold text-[8.5px] sm:text-[9.5px] uppercase tracking-wider rounded border border-emerald-200">Lesson Worksheets</span>
+              <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 font-mono font-bold text-[8.5px] sm:text-[9.5px] uppercase tracking-wider rounded border border-emerald-200">Interactive Radar Drills</span>
+              <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 font-mono font-bold text-[8.5px] sm:text-[9.5px] uppercase tracking-wider rounded border border-emerald-200">4J Homework Sheets</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="pt-3.5 border-t border-gray-100 flex items-center justify-between gap-3">
+          <button onclick="closeSyllabusSpecModal()" class="px-5 py-2.5 border border-gray-300 hover:bg-gray-50 rounded-xl text-xs font-serif font-bold uppercase transition active:scale-95">
+            Close Spec
+          </button>
+          
+          <button id="btn-spec-chat-tutor" class="px-4.5 py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-serif font-black text-xs uppercase tracking-wider rounded-xl shadow cursor-pointer transition active:scale-95 flex items-center gap-1.5">
+            <i class="fa-solid fa-robot text-xs animate-bounce"></i>
+            Deep Dive with Qwen AI
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== PREMIUM BRAND FOOTER ==================== -->
+  <footer id="app-footer" class="border-t border-gray-200 bg-white/70 py-6 mt-12 text-center text-xs text-gray-400">
+    <div class="w-full max-w-none px-6 md:px-10 lg:px-14 space-y-2">
+      <div class="flex items-center justify-center gap-2 text-royal-gold mb-1 font-serif font-bold text-xs uppercase tracking-widest">
+        <i class="fa-solid fa-crown text-[10px]"></i>
+        <span>4J's Educational Academy</span>
+      </div>
+      <p class="font-medium">© 2026 4J LMS. All Rights Reserved. Tuition of Distinction.</p>
+      <p class="text-[9px] font-mono">Europe/London UK Standard • System Certified Grade A</p>
+    </div>
+  </footer>
+
+  <!-- ==================== CORE JS BINDINGS FILE ==================== -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <!-- Auto-Slide Carousel Functionality Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const carousel = document.getElementById("hero-carousel");
+      const prevBtn = document.getElementById("carousel-prev");
+      const nextBtn = document.getElementById("carousel-next");
+      const dots = document.querySelectorAll(".carousel-dot");
+      
+      if (!carousel) return;
+      
+      const slides = carousel.children;
+      const totalSlides = slides.length;
+      if (totalSlides === 0) return;
+      
+      let currentIndex = 0;
+      let slideInterval;
+
+      function updateSlider() {
+        // Move track
+        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+        
+        // Update dots
+        dots.forEach((dot, idx) => {
+          if (idx === currentIndex) {
+            dot.classList.remove("bg-white/40");
+            dot.classList.add("bg-white", "scale-125");
+          } else {
+            dot.classList.remove("bg-white", "scale-125");
+            dot.classList.add("bg-white/40");
+          }
+        });
+      }
+
+      function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateSlider();
+      }
+
+      function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlider();
+      }
+
+      // Manual controls
+      if (prevBtn) {
+        prevBtn.addEventListener("click", function() {
+          prevSlide();
+          resetAutoplay();
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener("click", function() {
+          nextSlide();
+          resetAutoplay();
+        });
+      }
+
+      // Dot click controls
+      dots.forEach((dot) => {
+        dot.addEventListener("click", function() {
+          const idx = parseInt(this.getAttribute("data-index"));
+          if (!isNaN(idx) && idx !== currentIndex) {
+            currentIndex = idx;
+            updateSlider();
+            resetAutoplay();
+          }
+        });
+      });
+
+      // Autoplay setup
+      function startAutoplay() {
+        slideInterval = setInterval(nextSlide, 3500); // Cycle every 3.5 seconds
+      }
+
+      function resetAutoplay() {
+        clearInterval(slideInterval);
+        startAutoplay();
+      }
+
+      // Initialize slider state and kick-off autoplay
+      updateSlider();
+      startAutoplay();
+    });
+  </script>
+</div>
+</body>
+</html>

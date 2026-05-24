@@ -1,0 +1,287 @@
+/*
+ * 4J'S Educational Academy - Premium Design System Stylesheet
+ * Brand Aesthetic: Luxury White, Cream Ivory & Royal Gold
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&display=swap');
+
+:root {
+  --primary-gold: #D4AF37;
+  --royal-gold: #927116;
+  --dark-gold: #684f0b;
+  --ivory-white: #FAF9F5;
+  --cream-bg: #FCFAF5;
+  --onyx-black: #181612;
+  --slate-border: #E8E5DC;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at 10% 20%, #FDFBF7 0%, #FAF7ED 40%, #F3ECDC 100%);
+  color: var(--onyx-black);
+}
+
+/* Font classes for elegant headings */
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+.font-sans-alt {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Premium Gold Gradients and Shadows */
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #E6C657 0%, #D4AF37 50%, #B89222 100%);
+}
+.bg-dark-gradient {
+  background: linear-gradient(135deg, #24221C 0%, #181612 100%);
+}
+.text-gold-gradient {
+  background: linear-gradient(135deg, #C59B27 0%, #927116 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.border-gold-glow {
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.08);
+}
+.shadow-center {
+  box-shadow: 0 0 20px rgba(146, 113, 22, 0.06);
+}
+
+/* Elegant scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ivory-white);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(146, 113, 22, 0.25);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--royal-gold);
+}
+
+/* Visual Micro-animations */
+@keyframes pulse-gold {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 0.95;
+    box-shadow: 0 0 8px 4px rgba(212, 175, 55, 0.15);
+  }
+}
+.pulse-gold-ring {
+  animation: pulse-gold 2s infinite ease-in-out;
+}
+
+/* Watermark Overlay Styles */
+.watermark-overlay {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 40px,
+    rgba(220, 38, 38, 0.04) 40px,
+    rgba(220, 38, 38, 0.04) 80px
+  );
+}
+
+/* Print Styles for Tutor Invoices */
+@media print {
+  /* Hide all generic workspace structures */
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+  header, footer, nav, button, input, select, textarea, 
+  #login-modal, .xl:col-span-2, .lg:col-span-1, .bg-amber-500\/5, 
+  .flex-wrap, .pt-3, .border-t, .bg-[#181612], #app-main-header, #app-footer,
+  #btn-timesheet-print, #btn-fill-suggested-shift, .grid-cols-2, .bg-gray-50, .border-gray-150 {
+    display: none !important;
+  }
+  
+  /* Reset margins for printing */
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-w: 100% !important;
+  }
+  
+  /* Formats only the timesheet container */
+  #trainer-workspace, #panel-trainer-timesheet, .bg-white.border-amber-300 {
+    display: block !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 20px !important;
+  }
+
+  th, td {
+    border: 1px solid #000000 !important;
+    padding: 8px !important;
+    font-size: 10pt !important;
+  }
+
+  /* Force display of printed custom corporate letterhead header */
+  .print-header {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-bottom: 2px solid #927116 !important;
+    padding-bottom: 15px !important;
+    margin-bottom: 25px !important;
+  }
+  
+  .print-header-brand {
+    display: block !important;
+    font-family: 'Playfair Display', serif !important;
+    font-size: 20pt !important;
+    font-weight: bold !important;
+    color: #927116 !important;
+  }
+  
+  .print-header-details {
+    text-align: right !important;
+    font-size: 9pt !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Force display of invoice totals */
+  .print-invoice-summary {
+    display: block !important;
+    margin-top: 30px !important;
+    border-top: 1px solid #000000 !important;
+    padding-top: 15px !important;
+    text-align: right !important;
+  }
+  
+  .print-invoice-summary p {
+    font-size: 11pt !important;
+    margin: 4px 0 !important;
+  }
+  
+  .print-invoice-summary strong {
+    font-size: 13pt !important;
+    color: #927116 !important;
+  }
+
+  .print-footer-signature {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-top: 60px !important;
+    font-size: 10pt !important;
+  }
+  
+  .print-signature-line {
+    border-top: 1px solid #000000 !important;
+    width: 200px !important;
+    text-align: center !important;
+    padding-top: 5px !important;
+    margin-top: 40px !important;
+  }
+
+  /* Force display of elements that have the .hidden class from Tailwind CSS */
+  .print-table.hidden {
+    display: table !important;
+  }
+  .print-invoice-summary.hidden {
+    display: block !important;
+  }
+  .print-footer-signature.hidden {
+    display: flex !important;
+  }
+
+  /* Hide the delete button in printable layouts for a pristine physical invoice */
+  .print-table button {
+    display: none !important;
+  }
+}
+
+/* Hidden by default in desktop UI, shown only on print */
+.print-header, .print-invoice-summary, .print-footer-signature {
+  display: none;
+}
+
+/* ==================== PREMIUM VISUAL KEYFRAME ANIMATIONS ==================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes goldShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-up-delay-1 {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+  opacity: 0; /* Prevent flash */
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  opacity: 0; /* Prevent flash */
+}
+
+.gold-glow-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gold-glow-hover:hover {
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.15), 0 8px 10px -6px rgba(212, 175, 55, 0.1);
+  transform: translateY(-2px);
+}
+
+.shimmer-gold-btn {
+  background: linear-gradient(120deg, #927116 0%, #D4AF37 40%, #D4AF37 60%, #927116 100%);
+  background-size: 200% auto;
+  transition: all 0.3s ease;
+}
+.shimmer-gold-btn:hover {
+  animation: goldShimmer 1.8s infinite linear;
+  box-shadow: 0 8px 20px rgba(146, 113, 22, 0.25);
+  transform: scale(1.02);
+}
+
+.floating-badge {
+  animation: subtleFloat 3s infinite ease-in-out;
+}

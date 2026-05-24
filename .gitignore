@@ -1,0 +1,33 @@
+# Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Django files
+db.sqlite3
+staticfiles/
+media/
+
+# Node/JS dependencies & build
+node_modules/
+dist/
+build/
+coverage/
+
+# OS and IDE files
+.DS_Store
+.vscode/
+.idea/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*
+!.env.example
