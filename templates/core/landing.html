@@ -38,6 +38,153 @@
     #login-modal[style*="display: block"] {
       display: flex !important;
     }
+
+    /* ===== MOBILE RESPONSIVE OVERRIDES ===== */
+
+    /* Header: stack logo + clock on very small screens */
+    @media (max-width: 640px) {
+      #app-main-header > div {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        gap: 0.5rem !important;
+      }
+      /* Hide UK date on tiny screens to save space */
+      #live-uk-date {
+        display: none !important;
+      }
+      /* Shrink clock pill */
+      #app-main-header .flex.items-center.gap-2\.5 {
+        padding: 0.35rem 0.75rem !important;
+      }
+      /* Shrink nav buttons */
+      #app-main-header nav button {
+        padding: 0.35rem 0.6rem !important;
+        font-size: 0.65rem !important;
+        letter-spacing: 0.05em !important;
+      }
+      /* Shrink brand text */
+      #app-main-header h1 {
+        font-size: 0.85rem !important;
+      }
+      #app-main-header p {
+        display: none !important;
+      }
+      /* Smaller logo circle */
+      #app-main-header .w-12 {
+        width: 2.25rem !important;
+        height: 2.25rem !important;
+      }
+    }
+
+    /* Sub-tabs: horizontal scroll on mobile */
+    #guest-view-workspace > div:first-child {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    #guest-view-workspace > div:first-child::-webkit-scrollbar {
+      display: none;
+    }
+    #guest-view-workspace > div:first-child button {
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    /* Main padding on mobile */
+    @media (max-width: 640px) {
+      main {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        padding-top: 1rem !important;
+      }
+      /* Hero banner: reduce padding */
+      #panel-guest-landing .bg-dark-gradient {
+        padding: 1.25rem !important;
+      }
+      /* Stats grid: 1 col on mobile already — just reduce gap */
+      #panel-guest-landing .grid.grid-cols-1.sm\:grid-cols-3 {
+        gap: 0.75rem !important;
+      }
+      /* Reduce stat card padding */
+      #panel-guest-landing .grid.grid-cols-1.sm\:grid-cols-3 > div {
+        padding: 1rem !important;
+      }
+      /* Radar section padding */
+      #active-radar-section {
+        padding: 1rem !important;
+      }
+      /* Hero heading size */
+      #panel-guest-landing h2.font-serif {
+        font-size: 1.75rem !important;
+        line-height: 1.2 !important;
+      }
+      /* Button row: stack on tiny screens */
+      #panel-guest-landing .flex.flex-wrap.gap-4 {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+      }
+      #panel-guest-landing .flex.flex-wrap.gap-4 button,
+      #panel-guest-landing .flex.flex-wrap.gap-4 a {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+      }
+    }
+
+    /* Trainer / Admin workspace panels: reduce padding on mobile */
+    @media (max-width: 640px) {
+      #trainer-workspace, #admin-workspace {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      /* Grid: force single column on mobile */
+      .xl\:grid-cols-3, .lg\:grid-cols-3, .md\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
+      }
+      /* Table horizontal scroll */
+      .overflow-x-auto {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      table {
+        min-width: 520px;
+      }
+      /* Modal: full width on mobile */
+      #login-modal > div,
+      #syllabus-spec-modal > div,
+      #qwen-trainer-modal > div {
+        margin-left: 0.5rem !important;
+        margin-right: 0.5rem !important;
+        padding: 1.25rem !important;
+        max-width: calc(100vw - 1rem) !important;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      /* Syllabus form grid: 1 col on mobile */
+      #panel-guest-syllabus .grid.grid-cols-1.sm\:grid-cols-3 {
+        grid-template-columns: 1fr !important;
+      }
+      /* Radar header flex: stack on mobile */
+      #active-radar-section .flex.items-center.justify-between {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+      }
+      /* Spec modal grid: 1 col */
+      #syllabus-spec-modal .grid.grid-cols-2 {
+        grid-template-columns: 1fr !important;
+      }
+      /* Qwen chat: limit height */
+      #qwen-chat-messages {
+        max-height: 50vh !important;
+      }
+    }
+
+    /* Smooth scrolling site-wide */
+    html {
+      scroll-behavior: smooth;
+    }
   </style>
 </head>
 <body class="bg-royal-ivory text-royal-onyx min-h-screen flex flex-col antialiased relative overflow-x-hidden">
@@ -1237,28 +1384,41 @@
 
         <form id="login-form-submit" class="space-y-4">
           <div class="space-y-1">
-            <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Authorized Email Address</label>
-            <input type="email" id="login-email-input" required placeholder="tutor@4j.com" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+            <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Username</label>
+            <input type="text" id="login-email-input" required placeholder="e.g. stephen or admin" autocomplete="username" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
           </div>
 
           <div class="space-y-1">
-            <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Passcode Key</label>
-            <input type="password" id="login-password-input" required placeholder="••••••••" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+            <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Password</label>
+            <input type="password" id="login-password-input" required placeholder="••••••••" autocomplete="current-password" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
+          </div>
+
+          <!-- Credentials hint box -->
+          <div class="bg-amber-50 border border-amber-200/60 rounded-xl p-3 space-y-1">
+            <p class="text-[9px] uppercase font-bold text-amber-700 tracking-wider mb-1"><i class="fa-solid fa-circle-info mr-1"></i>Login Credentials</p>
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-600 font-semibold">Trainer Portal:</span>
+              <code class="text-[10px] bg-white border border-amber-200 rounded px-2 py-0.5 text-amber-800 font-mono font-bold">stephen / stephen</code>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-600 font-semibold">Admin Portal:</span>
+              <code class="text-[10px] bg-white border border-amber-200 rounded px-2 py-0.5 text-amber-800 font-mono font-bold">admin / admin</code>
+            </div>
           </div>
 
           <!-- Alert error message -->
           <div id="login-alert-box" class="hidden text-[10px] text-red-700 bg-red-50 border border-red-200/50 p-2.5 rounded-xl font-bold flex items-center gap-2">
             <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>Invalid credentials. Please consult Academy Registrar.</span>
+            <span>Invalid credentials. Please check username and password.</span>
           </div>
 
           <button type="submit" class="w-full py-2.5 bg-gold-gradient text-royal-onyx font-serif font-black text-xs uppercase tracking-wider rounded-xl shadow cursor-pointer transition active:scale-95">
-            Authenticate Access
+            <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Sign In
           </button>
         </form>
 
-        <div class="text-center mt-5">
-          <p class="text-[9.5px] text-gray-400 font-mono">Certified UK standard education lms server key</p>
+        <div class="text-center mt-4">
+          <p class="text-[9.5px] text-gray-400 font-mono">4J LMS &bull; Secure Staff Access Portal</p>
         </div>
 
       </div>
