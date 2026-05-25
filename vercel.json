@@ -2,15 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
       "src": "server.ts",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "dist/**",
+          "src/data/db.json"
+        ]
+      }
     }
   ],
   "routes": [
@@ -19,11 +18,12 @@
       "dest": "server.ts"
     },
     {
-      "handle": "filesystem"
+      "src": "/static/(.*)",
+      "dest": "server.ts"
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "server.ts"
     }
   ]
 }
