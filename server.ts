@@ -332,7 +332,7 @@ I encountered an error trying to contact the AI model. Let's direct our action. 
 // Vite middleware and file server setup
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
-    const { createServer as createViteServer } = await import("vite");
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
