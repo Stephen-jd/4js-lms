@@ -205,11 +205,11 @@
 
   <!-- ==================== 4J's VIDEO SPLASH SCREEN ==================== -->
   <style>
-    #splash-screen { background: #1c1a12; }
-    #splash-video { width: 100%; height: 100%; object-fit: cover; }
+    #splash-screen { background: #ffffff; }
+    #splash-video { width: 100%; height: 100%; object-fit: contain; }
   </style>
 
-  <div id="splash-screen" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black">
+  <div id="splash-screen" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-white">
     <video id="splash-video" autoplay muted playsinline>
       <source src="{% static 'images/splash.mp4' %}" type="video/mp4">
     </video>
