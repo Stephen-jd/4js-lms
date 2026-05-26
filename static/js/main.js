@@ -489,22 +489,28 @@ function handleSuccessfulLogin(shouldRedirect) {
   const btnLogout = document.getElementById("btn-logout");
   const loginModal = document.getElementById("login-modal");
 
+  // Set body data-role so CSS permanently hides forbidden tabs
+  document.body.dataset.role = state.currentUser.role;
+
   // Always show Public Portal for logged-in users
   if (btnPub) btnPub.classList.remove("hidden");
 
   if (state.currentUser.role === "trainer") {
-    // Trainer sees: Public + Trainer + Logout ONLY — admin button stays hidden
+    // Trainer sees: Public + Trainer + Logout ONLY
     if (btnTrain) {
       btnTrain.classList.remove("hidden");
-      document.getElementById("trainer-name-nav").textContent = `(${state.currentUser.name.split(" ")[0]})`;
+      const nameEl = document.getElementById("trainer-name-nav");
+      if (nameEl) nameEl.textContent = `(${state.currentUser.name.split(" ")[0]})`;
     }
-    if (btnAdmin) btnAdmin.classList.add("hidden"); // Ensure admin tab is hidden
+    // Ensure admin button is fully hidden via both class and attribute
+    if (btnAdmin) { btnAdmin.classList.add("hidden"); btnAdmin.style.display = "none"; }
     if (shouldRedirect) switchGlobalTab("trainer");
     else switchGlobalTab("public");
   } else if (state.currentUser.role === "admin") {
-    // Admin sees: Public + Admin + Logout ONLY — trainer tab hidden unless needed
+    // Admin sees: Public + Admin + Logout ONLY
     if (btnAdmin) btnAdmin.classList.remove("hidden");
-    if (btnTrain) btnTrain.classList.add("hidden"); // Admin does not see trainer portal
+    // Ensure trainer button is fully hidden
+    if (btnTrain) { btnTrain.classList.add("hidden"); btnTrain.style.display = "none"; }
     if (shouldRedirect) switchGlobalTab("admin");
     else switchGlobalTab("public");
   }
@@ -518,6 +524,9 @@ async function triggerLogout() {
     await fetch("/api/logout");
     state.currentUser = null;
 
+    // Clear role data attribute so CSS hides nothing
+    delete document.body.dataset.role;
+
     const btnPub = document.getElementById("btn-tab-public");
     const btnTrain = document.getElementById("btn-tab-trainer");
     const btnAdmin = document.getElementById("btn-tab-admin");
@@ -525,12 +534,14 @@ async function triggerLogout() {
     const loginModal = document.getElementById("login-modal");
 
     if (btnPub) btnPub.classList.add("hidden");
-    if (btnTrain) btnTrain.classList.add("hidden");
-    if (btnAdmin) btnAdmin.classList.add("hidden");
+    if (btnTrain) { btnTrain.classList.add("hidden"); btnTrain.style.display = ""; }
+    if (btnAdmin) { btnAdmin.classList.add("hidden"); btnAdmin.style.display = ""; }
     if (btnLogout) btnLogout.classList.add("hidden");
 
-    document.getElementById("login-email-input").value = "";
-    document.getElementById("login-password-input").value = "";
+    const emailInput = document.getElementById("login-email-input");
+    const passInput = document.getElementById("login-password-input");
+    if (emailInput) emailInput.value = "";
+    if (passInput) passInput.value = "";
 
     switchGlobalTab("public");
     if (loginModal) {
@@ -1561,6 +1572,7 @@ function renderTrainerTimesheetGrid() {
     return logDate >= cycleStart && logDate <= cycleEnd;
   });
 
+  // Build map of logged dates
   const logsByDate = {};
   let totalHours = 0;
   let totalLessons = 0;
@@ -1569,11 +1581,18 @@ function renderTrainerTimesheetGrid() {
     totalHours += parseFloat(log.hours);
     totalLessons += 1;
     const dStr = log.date;
-    if (!logsByDate[dStr]) {
-      logsByDate[dStr] = [];
-    }
+    if (!logsByDate[dStr]) logsByDate[dStr] = [];
     logsByDate[dStr].push(log);
   });
+
+  // Build map of schedule by day-of-week for this trainer
+  const DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const scheduleByDay = {};
+  (state.db.schedule || []).filter(s => s.trainerId === state.currentUser.id).forEach(s => {
+    if (!scheduleByDay[s.dayOfWeek]) scheduleByDay[s.dayOfWeek] = [];
+    scheduleByDay[s.dayOfWeek].push(s);
+  });
+
 
   const dateList = [];
   let current = new Date(cycleStart);
@@ -1595,49 +1614,41 @@ function renderTrainerTimesheetGrid() {
   dateList.forEach(dateObj => {
     const dStr = formatLocalDate(dateObj);
     const formattedUKDate = formatUKDate(dateObj);
+    const dayName = DAY_NAMES[dateObj.getDay()];
     const dayLogs = logsByDate[dStr] || [];
 
-    dayLogs.sort((a, b) => {
-      const timeA = a.startTime || "";
-      const timeB = b.startTime || "";
-      return timeA.localeCompare(timeB);
-    });
+    // Build virtual schedule-based entries for this day (shown as pre-filled ghost if no log exists yet)
+    const scheduledSessions = scheduleByDay[dayName] || [];
 
-    let rowCols = [];
-    let printRowCols = [];
-    
-    for (let i = 0; i < 4; i++) {
-      if (dayLogs[i]) {
-        const log = dayLogs[i];
-        rowCols.push(`<td class="border border-gray-300 p-2 text-center">${makeLessonPillHtml(log)}</td>`);
-        rowCols.push(`<td class="border border-gray-300 p-2 text-center font-bold text-amber-950 text-[10px]">${parseFloat(log.hours).toFixed(1)} hrs</td>`);
-        
-        printRowCols.push(`<td style="border: 1px solid #000; padding: 6px; text-align: center;">${makeLessonPillHtml(log)}</td>`);
-        printRowCols.push(`<td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold; font-size: 9pt;">${parseFloat(log.hours).toFixed(1)} hrs</td>`);
-      } else {
-        rowCols.push(`<td class="border border-gray-300 p-2 text-center text-gray-300 font-mono text-[10px]">-</td>`);
-        rowCols.push(`<td class="border border-gray-300 p-2 text-center text-gray-300 font-mono text-[10px]">-</td>`);
-        
-        printRowCols.push(`<td style="border: 1px solid #000; padding: 6px; text-align: center; color: #ccc;">-</td>`);
-        printRowCols.push(`<td style="border: 1px solid #000; padding: 6px; text-align: center; color: #ccc;">-</td>`);
+    // Merge: for each scheduled session, if a log matching that subject+time already exists, use it.
+    // Otherwise create a ghost entry from schedule for display only.
+    const effectiveSessions = [...dayLogs];
+    scheduledSessions.forEach(sched => {
+      const alreadyLogged = dayLogs.some(log =>
+        log.startTime === sched.startTime && log.subject && log.subject.toLowerCase().includes(sched.subject.toLowerCase())
+      );
+      if (!alreadyLogged) {
+        // Ghost scheduled session (not yet submitted)
+        effectiveSessions.push({
+          id: null,
+          subject: `${sched.classYear} ${sched.subject}`,
+          startTime: sched.startTime,
+          endTime: sched.endTime,
+          hours: ((parseInt(sched.endTime.split(":")[0])*60+parseInt(sched.endTime.split(":")[1])) -
+                  (parseInt(sched.startTime.split(":")[0])*60+parseInt(sched.startTime.split(":")[1]))) / 60,
+          isScheduleGhost: true
+        });
       }
-    }
-
-    const dayLessonsCount = dayLogs.length;
-    let dayTotalHours = 0;
-    dayLogs.forEach(log => {
-      dayTotalHours += parseFloat(log.hours);
     });
 
-    const lessonsCell = dayLessonsCount > 0 ? `<span class="font-bold text-amber-950 font-mono">${dayLessonsCount}</span>` : `<span class="text-gray-300 font-mono">-</span>`;
-    const hoursCell = dayTotalHours > 0 ? `<span class="font-bold text-amber-950 font-mono">${dayTotalHours.toFixed(1)} hrs</span>` : `<span class="text-gray-300 font-mono">-</span>`;
+    effectiveSessions.sort((a,b) => (a.startTime||'').localeCompare(b.startTime||''));
 
-    // On-screen table row
-    const tr = document.createElement("tr");
-    tr.className = "hover:bg-amber-500/5 transition";
-    tr.innerHTML = `
-      <td class="border border-gray-300 p-2 text-center text-gray-500 font-bold bg-slate-50 text-[10px] font-mono">${formattedUKDate}</td>
-      ${rowCols.join("")}
+    // Only count logged sessions for totals (not ghost)
+    const dayLogged = effectiveSessions.filter(s => !s.isScheduleGhost);
+    const hasAnyActivity = effectiveSessions.length > 0;
+
+    // Skip days with nothing (no logs, no schedule)
+    if (!hasAnyActivity) {
       <td class="border border-gray-300 p-2 text-center bg-slate-50/50">${lessonsCell}</td>
       <td class="border border-gray-300 p-2 text-center bg-slate-50/50">${hoursCell}</td>
     `;

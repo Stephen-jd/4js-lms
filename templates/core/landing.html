@@ -39,6 +39,15 @@
       display: flex !important;
     }
 
+    /* ===== PERMANENTLY HIDE ADMIN BUTTON FROM TRAINER ROLE ===== */
+    body[data-role="trainer"] #btn-tab-admin {
+      display: none !important;
+    }
+    /* ===== PERMANENTLY HIDE TRAINER BUTTON FROM ADMIN ROLE ===== */
+    body[data-role="admin"] #btn-tab-trainer {
+      display: none !important;
+    }
+
     /* ===== MOBILE RESPONSIVE OVERRIDES ===== */
 
     /* Header: stack logo + clock on very small screens */
@@ -194,79 +203,260 @@
   <div class="fixed bottom-0 right-0 w-[600px] h-[600px] bg-royal-gold/5 rounded-full blur-[180px] pointer-events-none translate-x-1/3 translate-y-1/3 z-0"></div>
   <div class="fixed top-1/3 right-10 w-[300px] h-[300px] bg-amber-500/3 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
-  <!-- ==================== 4J's LUXUROUS INTRO SPLASH SCREEN ==================== -->
-  <div id="splash-screen" class="fixed inset-0 bg-[#14120e] flex flex-col items-center justify-center z-[9999] transition-all duration-[1000ms] ease-in-out">
-    <div id="splash-logo-container" class="text-center space-y-6 transform scale-90 opacity-0 transition-all duration-[1200ms] ease-out">
-      
-      <!-- Large Gold Royal Wreath & Crest Logo -->
-      <div class="relative w-36 h-36 bg-white rounded-full flex items-center justify-center mx-auto shadow-2xl border-4 border-royal-lightgold/40 overflow-hidden p-2">
-        <!-- Shine Animation Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
-        <img src="{% static 'images/logo.png' %}" alt="4J Logo" class="w-full h-full object-contain">
-      </div>
-      
-      <div class="space-y-2">
-        <h2 class="font-serif font-black text-2xl sm:text-4xl text-royal-lightgold tracking-wide uppercase leading-none drop-shadow-md">
-          4J's Educational Academy
-        </h2>
-        <div class="h-[1.5px] w-28 bg-gradient-to-r from-transparent via-royal-lightgold to-transparent mx-auto"></div>
-        <p class="text-[10px] sm:text-xs uppercase tracking-[0.3em] font-sans-alt text-gray-400 font-bold">
-          Striving for Distinction
-        </p>
-      </div>
+  <!-- ==================== 4J's CINEMATIC LOGO FORMATION SPLASH ==================== -->
+  <style>
+    #splash-screen { background: #1c1a14; }
+    .s-leaf { opacity: 0; transform-origin: center; transition: opacity 0.22s ease, transform 0.4s cubic-bezier(.34,1.56,.64,1); }
+    #s-star-bottom { opacity: 0; transition: opacity 0.35s ease, transform 0.5s cubic-bezier(.34,1.56,.64,1); transform: scale(0.3); transform-origin: 260px 345px; }
+    #s-trophy { opacity: 0; transition: opacity 0.4s ease, transform 0.6s cubic-bezier(.34,1.56,.64,1); transform: translateY(20px) scale(0.5); transform-origin: 260px 295px; }
+    #s-crown { opacity: 0; transition: opacity 0.5s ease, transform 0.7s cubic-bezier(.34,1.56,.64,1); transform: translateY(-30px) scale(0.7); transform-origin: 260px 60px; }
+    #s-txt-4js { opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease; transform: translateY(8px); }
+    #s-txt-academy { opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease; transform: translateY(8px); }
+    #s-txt-tag { opacity: 0; transition: opacity 0.4s ease; }
+    #s-divider { opacity: 0; transition: opacity 0.4s ease, transform 0.6s ease; transform: scaleX(0); transform-origin: center; }
+    #s-progress-fill { width: 0%; transition: width 1.6s cubic-bezier(.4,0,.2,1); }
+  </style>
 
-      <!-- Luxury Progress bar -->
-      <div class="w-48 h-[3px] bg-slate-800 rounded-full mx-auto overflow-hidden relative border border-white/5">
-        <div class="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full w-0 transition-all duration-[1200ms] ease-out" id="splash-progress-bar"></div>
-      </div>
+  <div id="splash-screen" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden">
+
+    <!-- Full SVG Logo Formation -->
+    <svg id="splash-svg" xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 520 420"
+         style="width:min(88vw,460px);height:auto;overflow:visible;filter:drop-shadow(0 0 40px rgba(212,175,55,0.18))">
+
+      <!-- ===== LAUREL WREATH LEFT BRANCH (bottom → top) ===== -->
+      <!-- Leaf cluster 1 – bottom left -->
+      <g class="s-leaf" id="ll1" transform="translate(0,0)">
+        <ellipse cx="178" cy="308" rx="24" ry="9" fill="#B8962E" transform="rotate(-45 178 308)"/>
+        <ellipse cx="162" cy="316" rx="20" ry="8" fill="#A07828" transform="rotate(-30 162 316)"/>
+        <ellipse cx="192" cy="302" rx="18" ry="7" fill="#C9A84C" transform="rotate(-60 192 302)"/>
+      </g>
+      <g class="s-leaf" id="ll2" transform="translate(0,0)">
+        <ellipse cx="152" cy="282" rx="23" ry="9" fill="#B8962E" transform="rotate(-55 152 282)"/>
+        <ellipse cx="138" cy="290" rx="19" ry="7" fill="#A07828" transform="rotate(-40 138 290)"/>
+        <ellipse cx="165" cy="275" rx="17" ry="7" fill="#C9A84C" transform="rotate(-70 165 275)"/>
+      </g>
+      <g class="s-leaf" id="ll3" transform="translate(0,0)">
+        <ellipse cx="128" cy="252" rx="22" ry="9" fill="#B8962E" transform="rotate(-65 128 252)"/>
+        <ellipse cx="115" cy="260" rx="18" ry="7" fill="#A07828" transform="rotate(-50 115 260)"/>
+        <ellipse cx="140" cy="245" rx="17" ry="6" fill="#C9A84C" transform="rotate(-80 140 245)"/>
+      </g>
+      <g class="s-leaf" id="ll4" transform="translate(0,0)">
+        <ellipse cx="110" cy="220" rx="22" ry="8" fill="#B8962E" transform="rotate(-75 110 220)"/>
+        <ellipse cx="97" cy="228" rx="18" ry="7" fill="#A07828" transform="rotate(-60 97 228)"/>
+        <ellipse cx="122" cy="213" rx="16" ry="6" fill="#C9A84C" transform="rotate(-88 122 213)"/>
+      </g>
+      <g class="s-leaf" id="ll5" transform="translate(0,0)">
+        <ellipse cx="96" cy="186" rx="21" ry="8" fill="#B8962E" transform="rotate(-85 96 186)"/>
+        <ellipse cx="83" cy="193" rx="17" ry="7" fill="#A07828" transform="rotate(-70 83 193)"/>
+        <ellipse cx="108" cy="179" rx="16" ry="6" fill="#C9A84C" transform="rotate(-95 108 179)"/>
+      </g>
+      <g class="s-leaf" id="ll6" transform="translate(0,0)">
+        <ellipse cx="88" cy="151" rx="20" ry="8" fill="#B8962E" transform="rotate(-95 88 151)"/>
+        <ellipse cx="75" cy="157" rx="17" ry="6" fill="#A07828" transform="rotate(-80 75 157)"/>
+        <ellipse cx="100" cy="145" rx="15" ry="6" fill="#C9A84C" transform="rotate(-105 100 145)"/>
+      </g>
+      <g class="s-leaf" id="ll7" transform="translate(0,0)">
+        <ellipse cx="87" cy="116" rx="20" ry="7" fill="#B8962E" transform="rotate(-105 87 116)"/>
+        <ellipse cx="74" cy="121" rx="16" ry="6" fill="#A07828" transform="rotate(-90 74 121)"/>
+        <ellipse cx="99" cy="111" rx="15" ry="6" fill="#C9A84C" transform="rotate(-115 99 111)"/>
+      </g>
+      <g class="s-leaf" id="ll8" transform="translate(0,0)">
+        <ellipse cx="94" cy="83" rx="19" ry="7" fill="#B8962E" transform="rotate(-115 94 83)"/>
+        <ellipse cx="82" cy="87" rx="15" ry="6" fill="#A07828" transform="rotate(-100 82 87)"/>
+        <ellipse cx="106" cy="79" rx="14" ry="5" fill="#C9A84C" transform="rotate(-125 106 79)"/>
+      </g>
+      <!-- Stem line left -->
+      <path class="s-leaf" id="ll-stem" d="M178 318 Q148 270 100 200 Q85 160 95 85" stroke="#8B6914" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+      <!-- ===== LAUREL WREATH RIGHT BRANCH (mirror) ===== -->
+      <g class="s-leaf" id="lr1" transform="translate(0,0)">
+        <ellipse cx="342" cy="308" rx="24" ry="9" fill="#B8962E" transform="rotate(45 342 308)"/>
+        <ellipse cx="358" cy="316" rx="20" ry="8" fill="#A07828" transform="rotate(30 358 316)"/>
+        <ellipse cx="328" cy="302" rx="18" ry="7" fill="#C9A84C" transform="rotate(60 328 302)"/>
+      </g>
+      <g class="s-leaf" id="lr2" transform="translate(0,0)">
+        <ellipse cx="368" cy="282" rx="23" ry="9" fill="#B8962E" transform="rotate(55 368 282)"/>
+        <ellipse cx="382" cy="290" rx="19" ry="7" fill="#A07828" transform="rotate(40 382 290)"/>
+        <ellipse cx="355" cy="275" rx="17" ry="7" fill="#C9A84C" transform="rotate(70 355 275)"/>
+      </g>
+      <g class="s-leaf" id="lr3" transform="translate(0,0)">
+        <ellipse cx="392" cy="252" rx="22" ry="9" fill="#B8962E" transform="rotate(65 392 252)"/>
+        <ellipse cx="405" cy="260" rx="18" ry="7" fill="#A07828" transform="rotate(50 405 260)"/>
+        <ellipse cx="380" cy="245" rx="17" ry="6" fill="#C9A84C" transform="rotate(80 380 245)"/>
+      </g>
+      <g class="s-leaf" id="lr4" transform="translate(0,0)">
+        <ellipse cx="410" cy="220" rx="22" ry="8" fill="#B8962E" transform="rotate(75 410 220)"/>
+        <ellipse cx="423" cy="228" rx="18" ry="7" fill="#A07828" transform="rotate(60 423 228)"/>
+        <ellipse cx="398" cy="213" rx="16" ry="6" fill="#C9A84C" transform="rotate(88 398 213)"/>
+      </g>
+      <g class="s-leaf" id="lr5" transform="translate(0,0)">
+        <ellipse cx="424" cy="186" rx="21" ry="8" fill="#B8962E" transform="rotate(85 424 186)"/>
+        <ellipse cx="437" cy="193" rx="17" ry="7" fill="#A07828" transform="rotate(70 437 193)"/>
+        <ellipse cx="412" cy="179" rx="16" ry="6" fill="#C9A84C" transform="rotate(95 412 179)"/>
+      </g>
+      <g class="s-leaf" id="lr6" transform="translate(0,0)">
+        <ellipse cx="432" cy="151" rx="20" ry="8" fill="#B8962E" transform="rotate(95 432 151)"/>
+        <ellipse cx="445" cy="157" rx="17" ry="6" fill="#A07828" transform="rotate(80 445 157)"/>
+        <ellipse cx="420" cy="145" rx="15" ry="6" fill="#C9A84C" transform="rotate(105 420 145)"/>
+      </g>
+      <g class="s-leaf" id="lr7" transform="translate(0,0)">
+        <ellipse cx="433" cy="116" rx="20" ry="7" fill="#B8962E" transform="rotate(105 433 116)"/>
+        <ellipse cx="446" cy="121" rx="16" ry="6" fill="#A07828" transform="rotate(90 446 121)"/>
+        <ellipse cx="421" cy="111" rx="15" ry="6" fill="#C9A84C" transform="rotate(115 421 111)"/>
+      </g>
+      <g class="s-leaf" id="lr8" transform="translate(0,0)">
+        <ellipse cx="426" cy="83" rx="19" ry="7" fill="#B8962E" transform="rotate(115 426 83)"/>
+        <ellipse cx="438" cy="87" rx="15" ry="6" fill="#A07828" transform="rotate(100 438 87)"/>
+        <ellipse cx="414" cy="79" rx="14" ry="5" fill="#C9A84C" transform="rotate(125 414 79)"/>
+      </g>
+      <!-- Stem line right -->
+      <path class="s-leaf" id="lr-stem" d="M342 318 Q372 270 420 200 Q435 160 425 85" stroke="#8B6914" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+      <!-- ===== BOTTOM STAR ===== -->
+      <polygon id="s-star-bottom" fill="#B8962E"
+        points="260,330 264,343 278,343 267,351 271,364 260,356 249,364 253,351 242,343 256,343"/>
+
+      <!-- ===== TROPHY ===== -->
+      <g id="s-trophy">
+        <!-- Cup body -->
+        <path d="M247 288 Q242 270 242 255 L278 255 Q278 270 273 288 Z" fill="#C9A84C"/>
+        <!-- Cup rim top -->
+        <rect x="240" y="251" width="40" height="6" rx="3" fill="#D4AF37"/>
+        <!-- Handles -->
+        <path d="M242 260 Q230 260 230 268 Q230 276 242 276" stroke="#C9A84C" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M278 260 Q290 260 290 268 Q290 276 278 276" stroke="#C9A84C" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Stem -->
+        <rect x="256" y="287" width="8" height="10" rx="1" fill="#B8962E"/>
+        <!-- Base -->
+        <rect x="248" y="297" width="24" height="5" rx="2" fill="#B8962E"/>
+        <!-- Star on trophy -->
+        <polygon fill="#FFF8E1" points="260,261 262,267 268,267 263,271 265,277 260,273 255,277 257,271 252,267 258,267"/>
+      </g>
+
+      <!-- ===== CROWN ===== -->
+      <g id="s-crown">
+        <!-- Crown base band -->
+        <rect x="195" y="55" width="130" height="14" rx="5" fill="#D4AF37"/>
+        <!-- Crown peaks -->
+        <polygon fill="#D4AF37" points="200,57 215,20 230,48 245,12 260,40 275,12 290,48 305,20 320,57"/>
+        <!-- Crown gems -->
+        <circle cx="245" cy="16" r="5" fill="#FFF8E1"/>
+        <circle cx="260" cy="44" r="4" fill="#FFF8E1"/>
+        <circle cx="275" cy="16" r="5" fill="#FFF8E1"/>
+        <circle cx="215" cy="22" r="3.5" fill="#FFF8E1"/>
+        <circle cx="305" cy="22" r="3.5" fill="#FFF8E1"/>
+        <!-- Crown shine -->
+        <path d="M210 45 Q230 35 250 40" stroke="rgba(255,248,225,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- ===== TEXT ===== -->
+      <!-- "4J'S" -->
+      <text id="s-txt-4js" x="260" y="168"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="52" font-weight="900"
+        fill="#C9A84C" text-anchor="middle" letter-spacing="3">4J'S</text>
+
+      <!-- Divider line -->
+      <line id="s-divider" x1="195" y1="178" x2="325" y2="178" stroke="#B8962E" stroke-width="1.5" opacity="0.7"/>
+
+      <!-- "Educational Academy" -->
+      <text id="s-txt-academy" x="260" y="215"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="22" font-weight="700"
+        fill="#C9A84C" text-anchor="middle" letter-spacing="1">Educational Academy</text>
+
+      <!-- "STRIVING FOR DISTINCTION" -->
+      <text id="s-txt-tag" x="260" y="238"
+        font-family="Arial, sans-serif"
+        font-size="10" font-weight="700"
+        fill="#A07828" text-anchor="middle" letter-spacing="3">STRIVING FOR DISTINCTION</text>
+
+    </svg>
+
+    <!-- Gold progress bar -->
+    <div style="width:min(80vw,320px);height:2px;background:#2a2510;border-radius:999px;overflow:hidden;margin-top:2rem;position:relative;z-index:10;">
+      <div id="s-progress-fill" style="height:100%;background:linear-gradient(90deg,#B8962E,#D4AF37,#f59e0b);border-radius:999px;"></div>
     </div>
   </div>
 
-  <style>
-    @keyframes shimmer {
-      100% {
-        transform: translateX(100%);
-      }
-    }
-  </style>
-
   <script>
-    (function() {
-      // Run immediately before page rendering completes to prevent any flash of content
-      document.addEventListener("DOMContentLoaded", function() {
-        const splash = document.getElementById("splash-screen");
-        const logo = document.getElementById("splash-logo-container");
-        const progress = document.getElementById("splash-progress-bar");
-        
-        if (!splash || !logo) return;
-        
-        // Disable scroll temporarily while loading
+    (function(){
+      document.addEventListener("DOMContentLoaded", function(){
         document.body.style.overflow = "hidden";
-        
-        // 1. Start Zoom-In and Fade-In of the logo
-        setTimeout(() => {
-          logo.classList.remove("opacity-0", "scale-90");
-          logo.classList.add("opacity-100", "scale-105");
-          if (progress) progress.style.width = "100%";
-        }, 100);
-        
-        // 2. Start Zoom-Out and Fade-Out of the whole splash screen
-        setTimeout(() => {
-          logo.classList.remove("scale-105");
-          logo.classList.add("scale-110", "opacity-0");
-          splash.classList.add("opacity-0", "pointer-events-none", "scale-105");
-          
-          // Re-enable scroll
+        var splash = document.getElementById("splash-screen");
+
+        function show(id, delay, extraStyle){
+          setTimeout(function(){
+            var el = document.getElementById(id);
+            if(!el) return;
+            if(extraStyle){ Object.assign(el.style, extraStyle); }
+            el.style.opacity = "1";
+            el.style.transform = "none";
+          }, delay);
+        }
+        function showLeaf(id, delay){
+          setTimeout(function(){
+            var el = document.getElementById(id);
+            if(!el) return;
+            el.style.opacity = "1";
+            el.style.transform = "none";
+          }, delay);
+        }
+
+        // === SEQUENCE ===
+        // 1. Left + right stems first (fast)
+        showLeaf("ll-stem", 80);
+        showLeaf("lr-stem", 80);
+
+        // 2. Leaves build bottom → top simultaneously both sides
+        var leafDelay = 120;
+        var step = 140;
+        ["ll1","lr1","ll2","lr2","ll3","lr3","ll4","lr4","ll5","lr5","ll6","lr6","ll7","lr7","ll8","lr8"].forEach(function(id,i){
+          showLeaf(id, leafDelay + Math.floor(i/2)*step);
+        });
+
+        // 3. Star appears after leaves
+        var starT = leafDelay + 8*step + 100;
+        show("s-star-bottom", starT, {transform:"scale(1)", transformOrigin:"260px 345px"});
+
+        // 4. Trophy rises up
+        show("s-trophy", starT + 200, {transform:"translateY(0) scale(1)"});
+
+        // 5. Text builds in
+        show("s-txt-4js", starT + 380, {transform:"translateY(0)"});
+        show("s-divider", starT + 520, {transform:"scaleX(1)"});
+        show("s-txt-academy", starT + 600, {transform:"translateY(0)"});
+        show("s-txt-tag", starT + 750);
+
+        // 6. Crown drops in last
+        show("s-crown", starT + 900, {transform:"translateY(0) scale(1)"});
+
+        // 7. Progress bar fills
+        setTimeout(function(){
+          var bar = document.getElementById("s-progress-fill");
+          if(bar) bar.style.width = "100%";
+        }, starT + 200);
+
+        // 8. Fade out
+        var fadeStart = starT + 1600;
+        setTimeout(function(){
+          splash.style.transition = "opacity 1s ease";
+          splash.style.opacity = "0";
+          splash.style.pointerEvents = "none";
           document.body.style.overflow = "";
-        }, 1600);
-        
-        // 3. Completely remove from layout after transition completes
-        setTimeout(() => {
-          splash.style.display = "none";
-        }, 2600);
+        }, fadeStart);
+
+        // 9. Remove
+        setTimeout(function(){
+          if(splash) splash.style.display = "none";
+        }, fadeStart + 1100);
       });
     })();
   </script>
+
+
+
 
   <!-- Wrapper to isolate main layout above glowing blobs -->
   <div class="relative z-10 flex flex-col min-h-screen">
@@ -869,16 +1059,13 @@
         </div>
       </div>
 
-      <!-- Subtabs menu -->
+      <!-- Subtabs menu - only Timesheet and Syllabus (Qwen AI removed) -->
       <div class="flex justify-center sm:justify-start gap-3 mb-4">
         <button id="btn-trainer-timesheet" class="px-3.5 py-1.5 text-xs font-serif font-bold uppercase rounded-lg border transition bg-amber-600 text-white border-amber-600 shadow-sm">
           Interactive Timesheet Ledger
         </button>
         <button id="btn-trainer-syllabus" class="px-3.5 py-1.5 text-xs font-serif font-bold uppercase rounded-lg border transition bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
           Syllabus Checklists
-        </button>
-        <button id="btn-trainer-qwen" class="px-3.5 py-1.5 text-xs font-serif font-bold uppercase rounded-lg border transition bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-          Ollama Qwen AI Tutor
         </button>
       </div>
 
@@ -1118,60 +1305,11 @@
           <span class="text-[9.5px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-mono font-bold animate-pulse">SYSTEM STABLE</span>
         </div>
 
-        <!-- Quick prompt chips helper -->
-        <div class="space-y-2">
-          <span class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Quick syllabus helper queries</span>
-          <div class="flex flex-wrap gap-2">
-            <button class="btn-chat-prompt px-3 py-1.5 bg-slate-50 border border-gray-200 hover:border-amber-400 rounded-xl text-[10px] font-medium text-slate-800 transition">
-              Explain GCSE digestion biology
-            </button>
-            <button class="btn-chat-prompt px-3 py-1.5 bg-slate-50 border border-gray-200 hover:border-amber-400 rounded-xl text-[10px] font-medium text-slate-800 transition">
-              Solve SUVAT mechanics equations
-            </button>
-            <button class="btn-chat-prompt px-3 py-1.5 bg-slate-50 border border-gray-200 hover:border-amber-400 rounded-xl text-[10px] font-medium text-slate-800 transition">
-              Compare Edexcel English writing rubrics
-            </button>
-          </div>
-        </div>
-
-        <!-- Messages balloons stream -->
-        <div id="chat-messages-container" class="flex flex-col gap-3 overflow-y-auto max-h-[360px] min-h-[220px] border border-gray-250/65 rounded-2xl p-4 bg-slate-50/50">
-          
-          <!-- Default AI Greeting -->
-          <div class="flex justify-start">
-            <div class="max-w-[85%] rounded-2xl p-4 leading-relaxed font-sans bg-amber-500/5 text-amber-950 rounded-tl-none border border-amber-150">
-              Welcome to the 4J AI Tutor proxy portal. I am linked directly with local Ollama Qwen models, mapped with detailed GCSE, Edexcel, AQA, OCR, CIE, WJEC, and CCEA syllabus objectives, and fully cross-referenced with official, verified specification platforms (Pearson Edexcel, AQA, OCR, Cambridge CIE, WJEC, and CCEA). 
-              <br><br>
-              How can I assist you with lesson plans, equation breakdowns, or syllabus objectives today?
-            </div>
-          </div>
-
-          <!-- Thinking bubble -->
-          <div id="chat-thinking-bubble" class="hidden flex justify-start">
-            <div class="bg-amber-500/5 text-amber-950 rounded-2xl rounded-tl-none border border-amber-150 p-4 font-mono text-[10px] flex items-center gap-2">
-              <svg class="animate-spin h-3.5 w-3.5 text-royal-gold" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <span>Consulting Ollama Qwen localized tutor core...</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Message Input bar submit -->
-        <form id="chat-message-form" class="flex items-center gap-2">
-          <input type="text" id="chat-query-input" placeholder="Type curriculum questions, maths issues, biology topics..." class="flex-1 px-4 py-2.5 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
-          <button type="submit" class="px-5 py-2.5 bg-royal-onyx hover:bg-black text-white font-serif font-black text-xs uppercase tracking-wider rounded-xl transition shadow">
-            Ask Qwen
-          </button>
-        </form>
-
-      </div>
 
     </div>
 
     <!-- ==================== 3. ADMIN PORTAL WORKSPACE ==================== -->
+
     <div id="admin-workspace" class="space-y-6" style="display: none;">
       
       <!-- Metrics bar -->
