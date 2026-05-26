@@ -94,6 +94,12 @@ async function checkSessionState() {
       if (data.authenticated) {
         state.currentUser = data.user;
         handleSuccessfulLogin(false); // Restore session without redirecting
+      } else {
+        const loginModal = document.getElementById("login-modal");
+        if (loginModal) {
+          loginModal.style.display = "block";
+          loginModal.classList.remove("hidden");
+        }
       }
     }
   } catch (err) {
@@ -239,9 +245,27 @@ function setupNavEventListeners() {
 }
 
 function switchGlobalTab(tab) {
+  const pubWorkspace = document.getElementById("guest-view-workspace");
+  const trainerWorkspace = document.getElementById("trainer-workspace");
+  const adminWorkspace = document.getElementById("admin-workspace");
+  const loginModal = document.getElementById("login-modal");
+  const btnPub = document.getElementById("btn-tab-public");
+
+  if (!state.currentUser) {
+    state.activeTab = "public";
+    if (pubWorkspace) pubWorkspace.style.display = "none";
+    if (trainerWorkspace) trainerWorkspace.style.display = "none";
+    if (adminWorkspace) adminWorkspace.style.display = "none";
+    if (btnPub) btnPub.classList.add("hidden");
+    if (loginModal) {
+      loginModal.style.display = "block";
+      loginModal.classList.remove("hidden");
+    }
+    return;
+  }
+
   state.activeTab = tab;
 
-  const btnPub = document.getElementById("btn-tab-public");
   const btnTrain = document.getElementById("btn-tab-trainer");
   const btnAdmin = document.getElementById("btn-tab-admin");
 
@@ -259,11 +283,6 @@ function switchGlobalTab(tab) {
     btnAdmin.className = "px-4.5 py-2 rounded-xl text-xs sm:text-sm font-serif font-black uppercase transition-all duration-300 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow hover:shadow-md hover:scale-[1.02] active:scale-[0.98] tracking-wider border border-[#d4af37]/20";
   } 
 
-  const pubWorkspace = document.getElementById("guest-view-workspace");
-  const trainerWorkspace = document.getElementById("trainer-workspace");
-  const adminWorkspace = document.getElementById("admin-workspace");
-  const loginModal = document.getElementById("login-modal");
-
   if (pubWorkspace) pubWorkspace.style.display = "none";
   if (trainerWorkspace) trainerWorkspace.style.display = "none";
   if (adminWorkspace) adminWorkspace.style.display = "none";
@@ -271,6 +290,7 @@ function switchGlobalTab(tab) {
 
   if (tab === "public") {
     if (pubWorkspace) pubWorkspace.style.display = "block";
+    if (btnPub) btnPub.classList.remove("hidden");
   } else if (tab === "trainer") {
     if (state.currentUser && state.currentUser.role === "trainer") {
       if (trainerWorkspace) {
@@ -461,10 +481,13 @@ function setupLoginEventListeners() {
 function handleSuccessfulLogin(shouldRedirect) {
   if (!state.currentUser) return;
 
+  const btnPub = document.getElementById("btn-tab-public");
   const btnTrain = document.getElementById("btn-tab-trainer");
   const btnAdmin = document.getElementById("btn-tab-admin");
   const btnLogout = document.getElementById("btn-logout");
   const loginModal = document.getElementById("login-modal");
+
+  if (btnPub) btnPub.classList.remove("hidden");
 
   if (state.currentUser.role === "trainer") {
     if (btnTrain) {
@@ -472,9 +495,11 @@ function handleSuccessfulLogin(shouldRedirect) {
       document.getElementById("trainer-name-nav").textContent = `(${state.currentUser.name.split(" ")[0]})`;
     }
     if (shouldRedirect) switchGlobalTab("trainer");
+    else switchGlobalTab("public");
   } else if (state.currentUser.role === "admin") {
     if (btnAdmin) btnAdmin.classList.remove("hidden");
     if (shouldRedirect) switchGlobalTab("admin");
+    else switchGlobalTab("public");
   }
 
   if (btnLogout) btnLogout.classList.remove("hidden");
@@ -486,11 +511,13 @@ async function triggerLogout() {
     await fetch("/api/logout");
     state.currentUser = null;
 
+    const btnPub = document.getElementById("btn-tab-public");
     const btnTrain = document.getElementById("btn-tab-trainer");
     const btnAdmin = document.getElementById("btn-tab-admin");
     const btnLogout = document.getElementById("btn-logout");
     const loginModal = document.getElementById("login-modal");
 
+    if (btnPub) btnPub.classList.add("hidden");
     if (btnTrain) btnTrain.classList.add("hidden");
     if (btnAdmin) btnAdmin.classList.add("hidden");
     if (btnLogout) btnLogout.classList.add("hidden");
@@ -499,7 +526,10 @@ async function triggerLogout() {
     document.getElementById("login-password-input").value = "";
 
     switchGlobalTab("public");
-    if (loginModal) loginModal.style.display = "block";
+    if (loginModal) {
+      loginModal.style.display = "block";
+      loginModal.classList.remove("hidden");
+    }
     await refreshDatabaseSync();
   } catch (err) {
     console.error("Logout request failed:", err);

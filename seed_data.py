@@ -29,7 +29,7 @@ def seed():
     admin_user, created = User.objects.get_or_create(username='admin')
     if created or not admin_user.is_superuser:
         admin_user.email = 'admin@4j.com'
-        admin_user.set_password('admin123')
+        admin_user.set_password('admin')
         admin_user.is_staff = True
         admin_user.is_superuser = True
         admin_user.save()
@@ -49,7 +49,7 @@ def seed():
             'first_name': 'Stephen',
             'last_name': 'Jebadurai G',
             'email': 'stephenjdurai@gmail.com',
-            'password': 'password123',
+            'password': 'stephen',
             'hourly_rate': 45.00,
             'subjects': ["Maths", "Biology", "Physics", "Chemistry", "English", "Mechanics"]
         },
