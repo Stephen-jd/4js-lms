@@ -203,95 +203,16 @@
   <div class="fixed bottom-0 right-0 w-[600px] h-[600px] bg-royal-gold/5 rounded-full blur-[180px] pointer-events-none translate-x-1/3 translate-y-1/3 z-0"></div>
   <div class="fixed top-1/3 right-10 w-[300px] h-[300px] bg-amber-500/3 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
-  <!-- ==================== 4J's CINEMATIC LOGO FORMATION SPLASH ==================== -->
+  <!-- ==================== 4J's VIDEO SPLASH SCREEN ==================== -->
   <style>
     #splash-screen { background: #1c1a12; }
-    .sl { opacity:0; transition: opacity 0.28s ease, transform 0.45s cubic-bezier(.34,1.4,.64,1); }
-    #s-star { opacity:0; transform:scale(0); transform-origin:240px 316px; transition:opacity 0.35s ease,transform 0.55s cubic-bezier(.34,1.56,.64,1); }
-    #s-trophy { opacity:0; transform:translateY(14px) scale(0.6); transform-origin:240px 284px; transition:opacity 0.4s ease,transform 0.6s cubic-bezier(.34,1.3,.64,1); }
-    #s-crown { opacity:0; transform:translateY(-24px) scale(0.75); transform-origin:240px 50px; transition:opacity 0.5s ease,transform 0.7s cubic-bezier(.34,1.2,.64,1); }
-    #s-4js { opacity:0; transform:translateY(6px); transition:opacity 0.5s ease,transform 0.5s ease; }
-    #s-ea { opacity:0; transform:translateY(6px); transition:opacity 0.5s ease 0.08s,transform 0.5s ease 0.08s; }
-    #s-tag { opacity:0; transition:opacity 0.4s ease; }
-    #s-div { opacity:0; transform:scaleX(0); transform-origin:center; transition:opacity 0.4s,transform 0.55s ease; }
-    #s-bar { width:0%; transition:width 1.8s cubic-bezier(.4,0,.2,1); }
+    #splash-video { width: 100%; height: 100%; object-fit: cover; }
   </style>
 
-  <div id="splash-screen" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 390"
-         style="width:min(92vw,480px);height:auto;overflow:visible;filter:drop-shadow(0 0 32px rgba(184,150,46,0.22))">
-      <defs>
-        <!-- Gold gradient for richer leaves -->
-        <radialGradient id="lg" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stop-color="#E8C84A"/>
-          <stop offset="60%" stop-color="#B8962E"/>
-          <stop offset="100%" stop-color="#8B6914"/>
-        </radialGradient>
-      </defs>
-
-      <!-- ===== LEFT LAUREL BRANCH (8 leaf clusters, bottom→top) ===== -->
-      <!-- Each cluster has 3 layered ellipses to look like real laurel leaves -->
-      <g id="ll1" class="sl"><ellipse cx="175" cy="295" rx="25" ry="9" fill="url(#lg)" transform="rotate(-42 175 295)"/><ellipse cx="159" cy="304" rx="20" ry="7" fill="#A07828" transform="rotate(-28 159 304)"/></g>
-      <g id="ll2" class="sl"><ellipse cx="147" cy="270" rx="24" ry="9" fill="url(#lg)" transform="rotate(-56 147 270)"/><ellipse cx="132" cy="278" rx="19" ry="7" fill="#A07828" transform="rotate(-40 132 278)"/></g>
-      <g id="ll3" class="sl"><ellipse cx="123" cy="242" rx="23" ry="8" fill="url(#lg)" transform="rotate(-68 123 242)"/><ellipse cx="108" cy="250" rx="18" ry="6.5" fill="#A07828" transform="rotate(-52 108 250)"/></g>
-      <g id="ll4" class="sl"><ellipse cx="104" cy="212" rx="22" ry="8" fill="url(#lg)" transform="rotate(-78 104 212)"/><ellipse cx="90" cy="219" rx="18" ry="6.5" fill="#A07828" transform="rotate(-62 90 219)"/></g>
-      <g id="ll5" class="sl"><ellipse cx="91" cy="180" rx="21" ry="8" fill="url(#lg)" transform="rotate(-88 91 180)"/><ellipse cx="77" cy="187" rx="17" ry="6" fill="#A07828" transform="rotate(-72 77 187)"/></g>
-      <g id="ll6" class="sl"><ellipse cx="85" cy="148" rx="20" ry="7.5" fill="url(#lg)" transform="rotate(-98 85 148)"/><ellipse cx="72" cy="154" rx="16" ry="6" fill="#A07828" transform="rotate(-82 72 154)"/></g>
-      <g id="ll7" class="sl"><ellipse cx="86" cy="116" rx="19" ry="7" fill="url(#lg)" transform="rotate(-108 86 116)"/><ellipse cx="74" cy="121" rx="15" ry="5.5" fill="#A07828" transform="rotate(-92 74 121)"/></g>
-      <g id="ll8" class="sl"><ellipse cx="95" cy="86" rx="18" ry="6.5" fill="url(#lg)" transform="rotate(-118 95 86)"/><ellipse cx="83" cy="90" rx="14" ry="5" fill="#A07828" transform="rotate(-103 83 90)"/></g>
-      <!-- Left stem arc -->
-      <path id="ll-stem" class="sl" d="M174 298 C152 272 132 244 112 214 C96 188 88 158 92 88" stroke="#8B6914" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.65"/>
-
-      <!-- ===== RIGHT LAUREL BRANCH (mirror of left) ===== -->
-      <g id="lr1" class="sl"><ellipse cx="305" cy="295" rx="25" ry="9" fill="url(#lg)" transform="rotate(42 305 295)"/><ellipse cx="321" cy="304" rx="20" ry="7" fill="#A07828" transform="rotate(28 321 304)"/></g>
-      <g id="lr2" class="sl"><ellipse cx="333" cy="270" rx="24" ry="9" fill="url(#lg)" transform="rotate(56 333 270)"/><ellipse cx="348" cy="278" rx="19" ry="7" fill="#A07828" transform="rotate(40 348 278)"/></g>
-      <g id="lr3" class="sl"><ellipse cx="357" cy="242" rx="23" ry="8" fill="url(#lg)" transform="rotate(68 357 242)"/><ellipse cx="372" cy="250" rx="18" ry="6.5" fill="#A07828" transform="rotate(52 372 250)"/></g>
-      <g id="lr4" class="sl"><ellipse cx="376" cy="212" rx="22" ry="8" fill="url(#lg)" transform="rotate(78 376 212)"/><ellipse cx="390" cy="219" rx="18" ry="6.5" fill="#A07828" transform="rotate(62 390 219)"/></g>
-      <g id="lr5" class="sl"><ellipse cx="389" cy="180" rx="21" ry="8" fill="url(#lg)" transform="rotate(88 389 180)"/><ellipse cx="403" cy="187" rx="17" ry="6" fill="#A07828" transform="rotate(72 403 187)"/></g>
-      <g id="lr6" class="sl"><ellipse cx="395" cy="148" rx="20" ry="7.5" fill="url(#lg)" transform="rotate(98 395 148)"/><ellipse cx="408" cy="154" rx="16" ry="6" fill="#A07828" transform="rotate(82 408 154)"/></g>
-      <g id="lr7" class="sl"><ellipse cx="394" cy="116" rx="19" ry="7" fill="url(#lg)" transform="rotate(108 394 116)"/><ellipse cx="406" cy="121" rx="15" ry="5.5" fill="#A07828" transform="rotate(92 406 121)"/></g>
-      <g id="lr8" class="sl"><ellipse cx="385" cy="86" rx="18" ry="6.5" fill="url(#lg)" transform="rotate(118 385 86)"/><ellipse cx="397" cy="90" rx="14" ry="5" fill="#A07828" transform="rotate(103 397 90)"/></g>
-      <!-- Right stem arc -->
-      <path id="lr-stem" class="sl" d="M306 298 C328 272 348 244 368 214 C384 188 392 158 388 88" stroke="#8B6914" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.65"/>
-
-      <!-- ===== BOTTOM 5-POINT STAR ===== -->
-      <polygon id="s-star" fill="#D4AF37"
-        points="240,302 244.8,316 260,316 248,324 252.8,338 240,330 227.2,338 232,324 220,316 235.2,316"/>
-
-      <!-- ===== TROPHY ===== -->
-      <g id="s-trophy">
-        <path d="M227,280 Q222,262 222,248 L258,248 Q258,262 253,280 Z" fill="#C9A84C"/>
-        <rect x="220" y="244" width="40" height="6" rx="3" fill="#D4AF37"/>
-        <path d="M222,255 Q211,255 211,263 Q211,271 222,271" stroke="#C9A84C" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <path d="M258,255 Q269,255 269,263 Q269,271 258,271" stroke="#C9A84C" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <rect x="236" y="279" width="8" height="9" rx="1" fill="#B8962E"/>
-        <rect x="229" y="288" width="22" height="5" rx="2" fill="#B8962E"/>
-        <polygon fill="#FFF8E1" points="240,252 242.2,258 248.5,258 243.5,262 245.7,268 240,264 234.3,268 236.5,262 231.5,258 237.8,258"/>
-      </g>
-
-      <!-- ===== CROWN (drops in last) ===== -->
-      <g id="s-crown">
-        <polygon fill="#D4AF37" points="185,62 198,28 213,52 228,16 240,44 252,16 267,52 282,28 295,62"/>
-        <rect x="183" y="60" width="114" height="13" rx="4" fill="#C9A84C"/>
-        <circle cx="228" cy="19" r="5" fill="#FFF8E1"/>
-        <circle cx="240" cy="47" r="4" fill="#FFF8E1"/>
-        <circle cx="252" cy="19" r="5" fill="#FFF8E1"/>
-        <circle cx="198" cy="30" r="3.5" fill="#FFF8E1"/>
-        <circle cx="282" cy="30" r="3.5" fill="#FFF8E1"/>
-        <path d="M196 60 Q218 52 240 56 Q262 52 284 60" stroke="rgba(255,248,225,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      </g>
-
-      <!-- ===== CENTRE TEXT ===== -->
-      <text id="s-4js" x="240" y="158" font-family="Georgia,'Times New Roman',serif" font-size="50" font-weight="900" fill="#C9A84C" text-anchor="middle" letter-spacing="4">4J'S</text>
-      <line id="s-div" x1="185" y1="168" x2="295" y2="168" stroke="#B8962E" stroke-width="1.5" opacity="0.8"/>
-      <text id="s-ea" x="240" y="205" font-family="Georgia,'Times New Roman',serif" font-size="20" font-weight="700" fill="#C9A84C" text-anchor="middle" letter-spacing="1">Educational Academy</text>
-      <text id="s-tag" x="240" y="226" font-family="Arial,sans-serif" font-size="9.5" font-weight="700" fill="#A07828" text-anchor="middle" letter-spacing="3">STRIVING FOR DISTINCTION</text>
-    </svg>
-
-    <!-- Gold progress bar -->
-    <div style="width:min(75vw,280px);height:2px;background:#2a2510;border-radius:999px;overflow:hidden;margin-top:1.5rem;">
-      <div id="s-bar" style="height:100%;background:linear-gradient(90deg,#8B6914,#D4AF37,#f59e0b);border-radius:999px;"></div>
-    </div>
+  <div id="splash-screen" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black">
+    <video id="splash-video" autoplay muted playsinline>
+      <source src="{% static 'images/splash.mp4' %}" type="video/mp4">
+    </video>
   </div>
 
   <script>
@@ -299,61 +220,44 @@
       document.addEventListener("DOMContentLoaded", function(){
         document.body.style.overflow = "hidden";
         var splash = document.getElementById("splash-screen");
-
-        function show(id, t, styles){
-          setTimeout(function(){
-            var el = document.getElementById(id); if(!el) return;
-            if(styles) Object.assign(el.style, styles);
-            el.style.opacity = "1";
-            el.style.transform = "none";
-          }, t);
-        }
-
-        // === ANIMATION SEQUENCE ===
-        // Stems first (instant)
-        show("ll-stem", 60);
-        show("lr-stem", 60);
-
-        // 8 leaf pairs – both sides simultaneously, bottom to top
-        var base = 100, step = 130;
-        ["ll1","lr1","ll2","lr2","ll3","lr3","ll4","lr4","ll5","lr5","ll6","lr6","ll7","lr7","ll8","lr8"]
-          .forEach(function(id,i){ show(id, base + Math.floor(i/2)*step); });
-
-        var after = base + 8*step;
-        // Star pops after leaves done
-        show("s-star", after + 80, {transform:"scale(1)", transformOrigin:"240px 316px"});
-        // Trophy rises
-        show("s-trophy", after + 240, {transform:"translateY(0) scale(1)"});
-        // Text fades in
-        show("s-4js", after + 400);
-        show("s-div", after + 520, {transform:"scaleX(1)"});
-        show("s-ea", after + 600);
-        show("s-tag", after + 720);
-        // Crown drops in last
-        show("s-crown", after + 860, {transform:"translateY(0) scale(1)"});
-
-        // Progress bar fills
-        setTimeout(function(){ var b=document.getElementById("s-bar"); if(b) b.style.width="100%"; }, after+200);
-
-        // Screen fades out
-        var fadeAt = after + 1700;
-        setTimeout(function(){
-          splash.style.transition = "opacity 0.95s ease";
+        var video = document.getElementById("splash-video");
+        var hasEnded = false;
+        
+        function endSplash() {
+          if(hasEnded || !splash) return;
+          hasEnded = true;
+          
+          splash.style.transition = "opacity 0.8s ease";
           splash.style.opacity = "0";
           splash.style.pointerEvents = "none";
           document.body.style.overflow = "";
-        }, fadeAt);
+          
+          setTimeout(function(){
+            splash.style.display = "none";
+            var lm = document.getElementById("login-modal");
+            if(lm && !document.body.dataset.role) {
+              lm.style.display = "block";
+              lm.classList.remove("hidden");
+            }
+          }, 800);
+        }
 
-        // Remove + ensure login modal shows for unauthenticated users
-        setTimeout(function(){
-          if(splash) splash.style.display = "none";
-          // If no user session, make sure the login modal is visible
-          var lm = document.getElementById("login-modal");
-          if(lm && !document.body.dataset.role) {
-            lm.style.display = "block";
-            lm.classList.remove("hidden");
+        if(video) {
+          // Promise-based play to catch autoplay blocking
+          var playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(function(error) {
+              // Autoplay was prevented. End splash immediately.
+              endSplash();
+            });
           }
-        }, fadeAt + 1000);
+          video.addEventListener("ended", endSplash);
+          video.addEventListener("error", endSplash);
+          // Fallback maximum duration (adjust if the video is longer)
+          setTimeout(endSplash, 8000); 
+        } else {
+          setTimeout(endSplash, 1000);
+        }
       });
     })();
   </script>
