@@ -1371,54 +1371,74 @@
     </div>
 
     <!-- ==================== 4. LIGHTWEIGHT SLIGHTLY DETACHED LOGIN MODAL/CARD ==================== -->
-    <div id="login-modal" class="fixed inset-0 bg-royal-onyx/35 backdrop-blur-sm z-40 items-center justify-center flex hidden">
-      <div class="bg-white border border-royal-lightgold/35 rounded-3xl p-6 sm:p-8 max-w-sm w-full mx-4 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+    <div id="login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-40 items-center justify-center flex hidden">
+      <div class="bg-[#FCFAF5] border border-royal-lightgold/50 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl relative animate-in fade-in zoom-in duration-300">
         
+        <!-- Elegant Header -->
         <div class="text-center space-y-2 mb-6">
-          <div class="w-10 h-10 bg-amber-500/5 border border-amber-500/25 rounded-full flex items-center justify-center mx-auto">
-            <i class="fa-solid fa-lock text-royal-gold"></i>
+          <div class="w-12 h-12 bg-amber-500/10 border border-[#d4af37]/40 rounded-full flex items-center justify-center mx-auto">
+            <i class="fa-solid fa-shield-halved text-royal-gold text-lg"></i>
           </div>
-          <h3 class="font-serif font-black text-lg text-slate-900">4J LMS Secure Access Portal</h3>
-          <p class="text-[10px] text-gray-400">Sign in with email and authorized login passcode details</p>
+          <h3 class="font-serif font-black text-2xl text-slate-900 tracking-wide mt-2">4J's Educational Academy</h3>
+          <p class="text-[11px] text-slate-550 font-medium">Secure Learning Management Access Portal</p>
         </div>
 
         <form id="login-form-submit" class="space-y-4">
-          <div class="space-y-1">
-            <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Username</label>
-            <input type="text" id="login-email-input" required placeholder="e.g. stephen or admin" autocomplete="username" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
-          </div>
-
-          <div class="space-y-1">
-            <label class="block text-[9px] uppercase font-bold text-gray-400 tracking-wider">Password</label>
-            <input type="password" id="login-password-input" required placeholder="••••••••" autocomplete="current-password" class="w-full px-3.5 py-2 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none">
-          </div>
-
-          <!-- Credentials hint box -->
-          <div class="bg-amber-50 border border-amber-200/60 rounded-xl p-3 space-y-1">
-            <p class="text-[9px] uppercase font-bold text-amber-700 tracking-wider mb-1"><i class="fa-solid fa-circle-info mr-1"></i>Login Credentials</p>
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] text-slate-600 font-semibold">Trainer Portal:</span>
-              <code class="text-[10px] bg-white border border-amber-200 rounded px-2 py-0.5 text-amber-800 font-mono font-bold">stephen / stephen</code>
+          <!-- Username Input -->
+          <div class="space-y-1.5">
+            <label class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Username or Email</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+                <i class="fa-regular fa-user text-slate-400 text-xs"></i>
+              </span>
+              <input type="text" id="login-email-input" required placeholder="Enter username or email" autocomplete="username" class="w-full pl-9 pr-3.5 py-2.5 border border-slate-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:border-amber-500 focus:outline-none bg-white transition-all shadow-sm">
             </div>
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] text-slate-600 font-semibold">Admin Portal:</span>
-              <code class="text-[10px] bg-white border border-amber-200 rounded px-2 py-0.5 text-amber-800 font-mono font-bold">admin / admin</code>
+          </div>
+
+          <!-- Password Input -->
+          <div class="space-y-1.5">
+            <label class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Password</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+                <i class="fa-solid fa-key text-slate-400 text-xs"></i>
+              </span>
+              <input type="password" id="login-password-input" required placeholder="••••••••" autocomplete="current-password" class="w-full pl-9 pr-3.5 py-2.5 border border-slate-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:border-amber-500 focus:outline-none bg-white transition-all shadow-sm">
+            </div>
+          </div>
+
+          <!-- Premium Interactive Quick-Fill Credentials Box -->
+          <div class="bg-amber-50/70 border border-amber-200/50 rounded-2xl p-4 space-y-2">
+            <p class="text-[9.5px] uppercase font-bold text-amber-800 tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-600"></i> Quick-Fill Authorized Access</p>
+            
+            <div class="grid grid-cols-2 gap-2">
+              <!-- Quick Trainer Fill -->
+              <button type="button" onclick="document.getElementById('login-email-input').value='stephen'; document.getElementById('login-password-input').value='stephen';" class="flex flex-col items-center justify-center p-2.5 bg-white border border-amber-200/60 hover:border-amber-500 rounded-xl transition-all duration-300 hover:shadow-sm group cursor-pointer">
+                <span class="text-[10px] font-extrabold text-amber-950 flex items-center gap-1"><i class="fa-solid fa-graduation-cap text-amber-700"></i> Trainer</span>
+                <span class="text-[8.5px] text-slate-400 font-mono mt-0.5 group-hover:text-amber-850">stephen / stephen</span>
+              </button>
+              
+              <!-- Quick Admin Fill -->
+              <button type="button" onclick="document.getElementById('login-email-input').value='admin'; document.getElementById('login-password-input').value='admin';" class="flex flex-col items-center justify-center p-2.5 bg-white border border-amber-200/60 hover:border-amber-500 rounded-xl transition-all duration-300 hover:shadow-sm group cursor-pointer">
+                <span class="text-[10px] font-extrabold text-amber-950 flex items-center gap-1"><i class="fa-solid fa-user-gear text-amber-700"></i> Admin</span>
+                <span class="text-[8.5px] text-slate-400 font-mono mt-0.5 group-hover:text-amber-850">admin / admin</span>
+              </button>
             </div>
           </div>
 
           <!-- Alert error message -->
-          <div id="login-alert-box" class="hidden text-[10px] text-red-700 bg-red-50 border border-red-200/50 p-2.5 rounded-xl font-bold flex items-center gap-2">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>Invalid credentials. Please check username and password.</span>
+          <div id="login-alert-box" class="hidden text-[10.5px] text-red-700 bg-red-50 border border-red-200/50 p-3 rounded-xl font-bold flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-sm shrink-0"></i>
+            <span>Invalid credentials. Please verify your credentials and try again.</span>
           </div>
 
-          <button type="submit" class="w-full py-2.5 bg-gold-gradient text-royal-onyx font-serif font-black text-xs uppercase tracking-wider rounded-xl shadow cursor-pointer transition active:scale-95">
-            <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Sign In
+          <!-- Submit Button -->
+          <button type="submit" class="w-full py-3 bg-gold-gradient text-royal-onyx font-serif font-black text-xs uppercase tracking-wider rounded-xl shadow hover:shadow-md cursor-pointer transition active:scale-95">
+            <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Sign In to Portal
           </button>
         </form>
 
-        <div class="text-center mt-4">
-          <p class="text-[9.5px] text-gray-400 font-mono">4J LMS &bull; Secure Staff Access Portal</p>
+        <div class="text-center mt-5">
+          <p class="text-[10px] text-slate-400 font-mono">4J LMS &bull; Authorized Personnel Only</p>
         </div>
 
       </div>
