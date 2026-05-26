@@ -1662,7 +1662,32 @@ function renderTrainerTimesheetGrid() {
     const hasAnyActivity = effectiveSessions.length > 0;
 
     // Skip days with nothing (no logs, no schedule)
-    if (!hasAnyActivity) {
+    if (!hasAnyActivity) return;
+
+    const dayLessonsCount = dayLogged.length;
+    let dayTotalHours = 0;
+    dayLogged.forEach(log => {
+      dayTotalHours += parseFloat(log.hours || 0);
+    });
+
+    const rowCols = [];
+    effectiveSessions.forEach(log => {
+      if (log.isScheduleGhost) {
+        rowCols.push(`<div class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-gray-100 border border-gray-200 text-gray-500 rounded-lg text-[10px] font-medium leading-none mb-1 max-w-full italic"><span class="truncate max-w-[120px]">${log.subject} <span class="font-mono text-[9px]">(${log.startTime}-${log.endTime})</span></span><span class="text-[8px] uppercase tracking-wider ml-1">(Sched)</span></div>`);
+      } else {
+        rowCols.push(makeLessonPillHtml(log));
+      }
+    });
+
+    const lessonsCell = dayLessonsCount > 0 ? `<span class="font-bold text-amber-950 font-mono">${dayLessonsCount}</span>` : `<span class="text-gray-300 font-mono">-</span>`;
+    const hoursCell = dayTotalHours > 0 ? `<span class="font-bold text-amber-950 font-mono">${dayTotalHours.toFixed(1)} hrs</span>` : `<span class="text-gray-300 font-mono">-</span>`;
+
+    // On-screen table row
+    const tr = document.createElement("tr");
+    tr.className = "hover:bg-amber-500/5 transition";
+    tr.innerHTML = `
+      <td class="border border-gray-300 p-2 text-center text-gray-500 font-bold bg-slate-50 text-[10px] font-mono whitespace-nowrap">${formattedUKDate}<br><span class="text-[9px] uppercase tracking-widest text-slate-400">${dayName.slice(0,3)}</span></td>
+      <td class="border border-gray-300 p-2"><div class="flex flex-wrap gap-1">${rowCols.join("")}</div></td>
       <td class="border border-gray-300 p-2 text-center bg-slate-50/50">${lessonsCell}</td>
       <td class="border border-gray-300 p-2 text-center bg-slate-50/50">${hoursCell}</td>
     `;
