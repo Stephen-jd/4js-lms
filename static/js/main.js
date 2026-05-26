@@ -54,35 +54,49 @@ function setupLondonClock() {
     };
     const now = new Date();
     
-    if (timeEl) {
-      timeEl.textContent = now.toLocaleTimeString("en-GB", options);
-    }
+    try {
+      if (timeEl) {
+        timeEl.textContent = now.toLocaleTimeString("en-GB", options);
+      }
 
-    const dateOptions = {
-      timeZone: "Europe/London",
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    };
-    const dateFormatted = now.toLocaleDateString("en-GB", dateOptions);
-    if (dateEl) {
-      dateEl.textContent = dateFormatted;
-    }
+      const dateOptions = {
+        timeZone: "Europe/London",
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      };
+      const dateFormatted = now.toLocaleDateString("en-GB", dateOptions);
+      if (dateEl) {
+        dateEl.textContent = dateFormatted;
+      }
 
-    // Get active day name in UK Standard Timezone
-    const dayFormatter = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Europe/London",
-      weekday: "long"
-    });
-    const currentDayName = dayFormatter.format(now);
-    if (dayLabelEl) {
-      dayLabelEl.textContent = currentDayName;
+      // Get active day name in UK Standard Timezone
+      const dayFormatter = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/London",
+        weekday: "long"
+      });
+      const currentDayName = dayFormatter.format(now);
+      if (dayLabelEl) {
+        dayLabelEl.textContent = currentDayName;
+      }
+    } catch (e) {
+      // Fallback for browsers that don't support timeZone
+      if (timeEl) timeEl.textContent = now.toLocaleTimeString();
+      if (dateEl) dateEl.textContent = now.toLocaleDateString();
+      if (dayLabelEl) {
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        dayLabelEl.textContent = days[now.getDay()];
+      }
     }
   }
 
-  updateClock();
-  setInterval(updateClock, 1000);
+  try {
+    updateClock();
+    setInterval(updateClock, 1000);
+  } catch(e) {
+    console.error("Clock initialization failed:", e);
+  }
 }
 
 // --- SESSION CHECKER ---
