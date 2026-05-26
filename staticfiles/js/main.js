@@ -130,6 +130,7 @@ async function refreshDatabaseSync() {
       if (state.currentUser) {
         renderTrainerTimesheetGrid();
         renderTrainerSyllabusStatus();
+        renderTrainerWeeklySchedule();
       }
     }
   } catch (err) {
@@ -304,6 +305,7 @@ function switchGlobalTab(tab) {
         
         renderTrainerTimesheetGrid();
         renderTrainerSyllabusStatus();
+        renderTrainerWeeklySchedule();
       }
     } else {
       if (loginModal) loginModal.style.display = "block";
@@ -487,17 +489,22 @@ function handleSuccessfulLogin(shouldRedirect) {
   const btnLogout = document.getElementById("btn-logout");
   const loginModal = document.getElementById("login-modal");
 
+  // Always show Public Portal for logged-in users
   if (btnPub) btnPub.classList.remove("hidden");
 
   if (state.currentUser.role === "trainer") {
+    // Trainer sees: Public + Trainer + Logout ONLY — admin button stays hidden
     if (btnTrain) {
       btnTrain.classList.remove("hidden");
       document.getElementById("trainer-name-nav").textContent = `(${state.currentUser.name.split(" ")[0]})`;
     }
+    if (btnAdmin) btnAdmin.classList.add("hidden"); // Ensure admin tab is hidden
     if (shouldRedirect) switchGlobalTab("trainer");
     else switchGlobalTab("public");
   } else if (state.currentUser.role === "admin") {
+    // Admin sees: Public + Admin + Logout ONLY — trainer tab hidden unless needed
     if (btnAdmin) btnAdmin.classList.remove("hidden");
+    if (btnTrain) btnTrain.classList.add("hidden"); // Admin does not see trainer portal
     if (shouldRedirect) switchGlobalTab("admin");
     else switchGlobalTab("public");
   }
@@ -2123,22 +2130,34 @@ function setupAdminEventListeners() {
   }
 }
 
-function renderAdminTrainersList() {
+function renderAdminTrainersList(filterSubject) {
   const list = document.getElementById("admin-trainers-list-box");
   if (!list || !state.db) return;
 
   list.innerHTML = "";
 
-  state.db.trainers.forEach(t => {
+  const trainers = filterSubject
+    ? state.db.trainers.filter(t => t.subjects && t.subjects.some(s => s.toLowerCase().includes(filterSubject.toLowerCase())))
+    : state.db.trainers;
+
+  if (trainers.length === 0) {
+    list.innerHTML = `<div class="text-center text-gray-400 py-6 text-xs font-serif">No instructors found for this subject.</div>`;
+    return;
+  }
+
+  trainers.forEach(t => {
     const card = document.createElement("div");
-    card.className = "flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-xl";
+    card.className = "flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-xl hover:border-amber-300 transition";
+    const subjectTags = (t.subjects || []).map(s =>
+      `<span class="px-1.5 py-0.5 rounded-md text-[8px] font-bold uppercase bg-amber-100 text-amber-800 border border-amber-200">${s}</span>`
+    ).join(" ");
     card.innerHTML = `
-      <div>
+      <div class="flex-1 min-w-0">
         <h4 class="text-xs font-serif font-black text-amber-950">${t.name}</h4>
-        <p class="text-[9px] font-mono text-gray-500">${t.email} • Rate: £${t.hourlyRate}/hr</p>
-        <p class="text-[9px] text-amber-800 font-bold uppercase tracking-wider mt-0.5">${t.subjects.join(', ')}</p>
+        <p class="text-[9px] font-mono text-gray-500">${t.email} &bull; Rate: £${t.hourlyRate}/hr</p>
+        <div class="flex flex-wrap gap-1 mt-1">${subjectTags}</div>
       </div>
-      <button class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded text-[9px] font-bold uppercase transition cursor-pointer" onclick="deleteTrainerProfile('${t.id}')">
+      <button class="ml-3 px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded text-[9px] font-bold uppercase transition cursor-pointer flex-shrink-0" onclick="deleteTrainerProfile('${t.id}')">
         Remove
       </button>
     `;
@@ -2161,21 +2180,37 @@ window.deleteTrainerProfile = async (trainerId) => {
   }
 };
 
-function renderAdminTimetableList() {
+function renderAdminTimetableList(filterTrainer, filterSubject) {
   const tbody = document.getElementById("admin-timetable-tbody");
   if (!tbody || !state.db) return;
 
   tbody.innerHTML = "";
 
-  state.db.schedule.forEach(s => {
+  const DAY_ORDER = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  let slots = [...state.db.schedule].sort((a,b) => DAY_ORDER.indexOf(a.dayOfWeek) - DAY_ORDER.indexOf(b.dayOfWeek) || a.startTime.localeCompare(b.startTime));
+
+  if (filterTrainer) slots = slots.filter(s => s.trainerId === filterTrainer);
+  if (filterSubject) slots = slots.filter(s => s.subject.toLowerCase().includes(filterSubject.toLowerCase()));
+
+  if (slots.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-gray-400">No timetable slots match your filters.</td></tr>`;
+    return;
+  }
+
+  const dayColors = { Monday:'bg-blue-50', Tuesday:'bg-violet-50', Wednesday:'bg-emerald-50', Thursday:'bg-amber-50', Friday:'bg-rose-50', Saturday:'bg-sky-50', Sunday:'bg-teal-50' };
+
+  slots.forEach(s => {
     const tr = document.createElement("tr");
     tr.className = "border-b border-gray-100 hover:bg-amber-500/5 transition";
+    const dayBg = dayColors[s.dayOfWeek] || 'bg-gray-50';
     tr.innerHTML = `
-      <td class="py-2.5 font-bold font-serif text-slate-800">${s.dayOfWeek}</td>
+      <td class="py-2.5 font-bold font-serif text-slate-800">
+        <span class="px-2 py-0.5 rounded-md text-[9px] ${dayBg} text-slate-700 font-bold">${s.dayOfWeek}</span>
+      </td>
       <td class="py-2.5 font-medium text-amber-950">${s.trainerName}</td>
       <td class="py-2.5 text-gray-650">${s.classYear}</td>
       <td class="py-2.5 font-semibold">${s.subject}</td>
-      <td class="py-2.5 font-mono">${s.startTime} – ${s.endTime}</td>
+      <td class="py-2.5 font-mono text-xs text-slate-700">${s.startTime} – ${s.endTime}</td>
       <td class="py-2.5 text-right">
         <button class="px-2 py-0.5 bg-red-50 hover:bg-red-100 text-red-600 rounded text-[9px] font-bold uppercase transition cursor-pointer" onclick="deleteScheduleSlot('${s.id}')">
           Delete
@@ -2203,16 +2238,121 @@ window.deleteScheduleSlot = async (slotId) => {
 
 function populateTrainerPickers() {
   const picker = document.getElementById("sched-trainer-picker");
-  if (!picker || !state.db) return;
+  const timetableTrainerFilter = document.getElementById("admin-timetable-filter-trainer");
+  if (!state.db) return;
 
-  // Clear current options keep first placeholder
-  picker.innerHTML = `<option value="">-- Choose Instructor --</option>`;
+  if (picker) {
+    picker.innerHTML = `<option value="">-- Choose Instructor --</option>`;
+    state.db.trainers.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t.id;
+      opt.textContent = `${t.name} (${t.email})`;
+      picker.appendChild(opt);
+    });
+  }
 
-  state.db.trainers.forEach(t => {
-    const opt = document.createElement("option");
-    opt.value = t.id;
-    opt.textContent = `${t.name} (${t.email})`;
-    picker.appendChild(opt);
+  if (timetableTrainerFilter) {
+    timetableTrainerFilter.innerHTML = `<option value="">All Instructors</option>`;
+    state.db.trainers.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t.id;
+      opt.textContent = t.name;
+      timetableTrainerFilter.appendChild(opt);
+    });
+    // Wire filter events
+    const subjectFilter = document.getElementById("admin-timetable-filter-subject");
+    const refilter = () => renderAdminTimetableList(timetableTrainerFilter.value, subjectFilter ? subjectFilter.value : "");
+    timetableTrainerFilter.addEventListener("change", refilter);
+    if (subjectFilter) subjectFilter.addEventListener("change", refilter);
+  }
+
+  // Wire admin faculty subject filter
+  const adminSubjectFilter = document.getElementById("admin-filter-subject");
+  if (adminSubjectFilter) {
+    adminSubjectFilter.addEventListener("change", () => renderAdminTrainersList(adminSubjectFilter.value));
+  }
+}
+
+// --- TRAINER WEEKLY SCHEDULE RENDERER ---
+function renderTrainerWeeklySchedule() {
+  const container = document.getElementById("trainer-weekly-schedule");
+  if (!container || !state.db || !state.currentUser) return;
+
+  const mySchedule = state.db.schedule.filter(s => s.trainerId === state.currentUser.id);
+
+  if (mySchedule.length === 0) {
+    container.innerHTML = `<div class="text-center text-gray-400 py-6 text-xs col-span-4 font-serif">No schedule entries found. Contact admin to set up your timetable.</div>`;
+    return;
+  }
+
+  const DAY_ORDER = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  const dayColors = {
+    Monday:    { bg:'bg-blue-50',    border:'border-blue-200',   text:'text-blue-800',   badge:'bg-blue-600' },
+    Tuesday:   { bg:'bg-violet-50',  border:'border-violet-200', text:'text-violet-800', badge:'bg-violet-600' },
+    Wednesday: { bg:'bg-emerald-50', border:'border-emerald-200',text:'text-emerald-800',badge:'bg-emerald-600' },
+    Thursday:  { bg:'bg-amber-50',   border:'border-amber-200',  text:'text-amber-800',  badge:'bg-amber-600' },
+    Friday:    { bg:'bg-rose-50',    border:'border-rose-200',   text:'text-rose-800',   badge:'bg-rose-600' },
+    Saturday:  { bg:'bg-sky-50',     border:'border-sky-200',    text:'text-sky-800',    badge:'bg-sky-600' },
+    Sunday:    { bg:'bg-teal-50',    border:'border-teal-200',   text:'text-teal-800',   badge:'bg-teal-600' },
+  };
+
+  // Group by day
+  const grouped = {};
+  DAY_ORDER.forEach(d => { grouped[d] = []; });
+  mySchedule.forEach(s => { if (grouped[s.dayOfWeek]) grouped[s.dayOfWeek].push(s); });
+  DAY_ORDER.forEach(d => grouped[d].sort((a,b) => a.startTime.localeCompare(b.startTime)));
+
+  container.innerHTML = "";
+
+  DAY_ORDER.forEach(day => {
+    const sessions = grouped[day];
+    if (sessions.length === 0) return;
+    const c = dayColors[day] || { bg:'bg-gray-50', border:'border-gray-200', text:'text-gray-800', badge:'bg-gray-500' };
+
+    const col = document.createElement("div");
+    col.className = `rounded-2xl border ${c.border} ${c.bg} p-3 space-y-2`;
+
+    const dayHdr = document.createElement("div");
+    dayHdr.className = "flex items-center gap-2 mb-2";
+    dayHdr.innerHTML = `<span class="px-2 py-0.5 rounded-full text-white text-[8.5px] font-bold uppercase tracking-wider ${c.badge}">${day}</span>
+      <span class="text-[9px] font-bold ${c.text}">${sessions.length} session${sessions.length > 1 ? 's' : ''}</span>`;
+    col.appendChild(dayHdr);
+
+    sessions.forEach(s => {
+      const hrs = ((parseInt(s.endTime.split(':')[0])*60 + parseInt(s.endTime.split(':')[1])) -
+                   (parseInt(s.startTime.split(':')[0])*60 + parseInt(s.startTime.split(':')[1]))) / 60;
+      const chip = document.createElement("div");
+      chip.className = `bg-white border ${c.border} rounded-xl p-2.5 cursor-pointer hover:shadow-sm transition group`;
+      chip.title = `Click to auto-fill timesheet for today`;
+      chip.innerHTML = `
+        <div class="flex items-start justify-between gap-1">
+          <div>
+            <p class="text-[10px] font-serif font-black text-slate-800">${s.classYear} ${s.subject}</p>
+            <p class="text-[9px] font-mono ${c.text} mt-0.5">${s.startTime} – ${s.endTime}</p>
+          </div>
+          <span class="text-[8.5px] font-bold text-white ${c.badge} px-1.5 py-0.5 rounded-md">${hrs % 1 === 0 ? hrs + 'h' : hrs.toFixed(1) + 'h'}</span>
+        </div>
+      `;
+      // Click to autofill timesheet
+      chip.addEventListener("click", () => {
+        const today = new Date().toLocaleDateString("en-GB", { timeZone: "Europe/London" }).split("/").reverse().join("-");
+        const dateInput = document.getElementById("time-log-date");
+        const subjectInput = document.getElementById("time-log-subject");
+        const startInput = document.getElementById("time-log-start");
+        const endInput = document.getElementById("time-log-end");
+        const hoursInput = document.getElementById("time-log-hours");
+        if (dateInput) dateInput.value = today;
+        if (subjectInput) subjectInput.value = `${s.classYear} ${s.subject}`;
+        if (startInput) startInput.value = s.startTime;
+        if (endInput) endInput.value = s.endTime;
+        if (hoursInput) hoursInput.value = hrs.toFixed(1);
+        // Scroll to log form
+        document.getElementById("time-log-date")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      col.appendChild(chip);
+    });
+
+    container.appendChild(col);
   });
 }
 

@@ -884,6 +884,22 @@
 
       <!-- 2.a INTERACTIVE TIMESHEET LEDGER -->
       <div id="panel-trainer-timesheet" class="space-y-6">
+
+        <!-- ===== WEEKLY SCHEDULE CARD ===== -->
+        <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm">
+          <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+            <div>
+              <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide">My Weekly Timetable</h3>
+              <p class="text-[9.5px] text-gray-400 mt-0.5">Your confirmed UK-time schedule — click any session to auto-fill the timesheet below</p>
+            </div>
+            <span class="px-2 py-0.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[8.5px] font-bold uppercase tracking-wider rounded-full font-mono">Live Schedule</span>
+          </div>
+          <div id="trainer-weekly-schedule" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+            <!-- Populated by JS renderTrainerWeeklySchedule() -->
+            <div class="text-center text-gray-400 py-6 text-xs col-span-4">Loading your schedule...</div>
+          </div>
+        </div>
+
         
         <!-- Shift logging inputs form & metric summary totals card -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
@@ -1257,7 +1273,21 @@
 
         <!-- Trainers Directory list -->
         <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4">
-          <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide border-b border-gray-50 pb-2">Active Instructors Directory</h3>
+          <div class="flex flex-wrap items-center justify-between border-b border-gray-50 pb-2 gap-2">
+            <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide">Active Instructors Directory</h3>
+            <div class="flex items-center gap-2">
+              <label class="text-[9px] uppercase font-bold text-gray-400 tracking-wider whitespace-nowrap">Filter by Subject:</label>
+              <select id="admin-filter-subject" class="px-2 py-1.5 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+                <option value="">All Subjects</option>
+                <option value="Maths">Maths</option>
+                <option value="Physics">Physics</option>
+                <option value="Biology">Biology</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="English">English</option>
+                <option value="Mechanics Maths">Mechanics Maths</option>
+              </select>
+            </div>
+          </div>
           
           <div id="admin-trainers-list-box" class="flex flex-col gap-3 max-h-[380px] overflow-y-auto pr-1">
             <!-- Populated via JS -->
@@ -1342,8 +1372,24 @@
 
         <!-- Timetable Live list -->
         <div class="bg-white border border-gray-250/60 rounded-3xl p-6 shadow-sm space-y-4 lg:col-span-2">
-          <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide border-b border-gray-50 pb-2">Active Timetable Blocks Checklist</h3>
-          
+          <div class="flex flex-wrap items-center justify-between border-b border-gray-50 pb-2 gap-2">
+            <h3 class="font-serif font-black text-sm text-slate-800 uppercase tracking-wide">Active Timetable Blocks</h3>
+            <div class="flex items-center gap-2">
+              <label class="text-[9px] uppercase font-bold text-gray-400 tracking-wider whitespace-nowrap">Filter Faculty:</label>
+              <select id="admin-timetable-filter-trainer" class="px-2 py-1.5 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+                <option value="">All Instructors</option>
+              </select>
+              <select id="admin-timetable-filter-subject" class="px-2 py-1.5 border border-gray-250 rounded-xl text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white">
+                <option value="">All Subjects</option>
+                <option value="Maths">Maths</option>
+                <option value="Physics">Physics</option>
+                <option value="Biology">Biology</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="English">English</option>
+                <option value="Mechanics Maths">Mechanics Maths</option>
+              </select>
+            </div>
+          </div>
           <div class="overflow-x-auto max-h-[380px] overflow-y-auto">
             <table class="w-full text-left text-xs">
               <thead>

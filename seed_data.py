@@ -106,25 +106,24 @@ def seed():
     # 5. Create Schedules (Stephen's Exact Calendar)
     schedules_data = [
         # Monday
-        { 'trainer_key': 'stephen', 'day': 'Monday', 'start': '18:00', 'end': '19:00', 'subj': 'Maths', 'year': 'Year 7', 'desc': 'Riaz maths' },
+        { 'trainer_key': 'stephen', 'day': 'Monday', 'start': '18:00', 'end': '19:00', 'subj': 'Maths', 'year': 'Year 7', 'desc': 'Year 7 Maths' },
         # Tuesday
-        { 'trainer_key': 'stephen', 'day': 'Tuesday', 'start': '16:30', 'end': '18:00', 'subj': 'Biology', 'year': 'Year 8', 'desc': '(1:2) biology' },
-        { 'trainer_key': 'stephen', 'day': 'Tuesday', 'start': '18:00', 'end': '19:00', 'subj': 'Maths', 'year': 'Year 7', 'desc': '(riaz maths)' },
-        { 'trainer_key': 'stephen', 'day': 'Tuesday', 'start': '19:30', 'end': '21:00', 'subj': 'Mechanics Maths', 'year': 'Year 12', 'desc': 'Year 12 Mechanic maths' },
+        { 'trainer_key': 'stephen', 'day': 'Tuesday', 'start': '16:30', 'end': '18:00', 'subj': 'Biology', 'year': 'Year 8', 'desc': 'Year 8 Biology' },
+        { 'trainer_key': 'stephen', 'day': 'Tuesday', 'start': '18:00', 'end': '19:00', 'subj': 'Maths', 'year': 'Year 7', 'desc': 'Year 7 Maths' },
+        { 'trainer_key': 'stephen', 'day': 'Tuesday', 'start': '19:30', 'end': '21:00', 'subj': 'Mechanics Maths', 'year': 'Year 12', 'desc': 'Year 12 Mechanic Maths' },
         # Wednesday
-        { 'trainer_key': 'stephen', 'day': 'Wednesday', 'start': '16:30', 'end': '18:00', 'subj': 'English', 'year': 'Year 4', 'desc': 'year 4 english' },
-        { 'trainer_key': 'stephen', 'day': 'Wednesday', 'start': '18:00', 'end': '19:00', 'subj': 'English', 'year': 'Year 7', 'desc': 'year 7 english' },
+        { 'trainer_key': 'stephen', 'day': 'Wednesday', 'start': '16:30', 'end': '18:00', 'subj': 'English', 'year': 'Year 4', 'desc': 'Year 4 English' },
+        { 'trainer_key': 'stephen', 'day': 'Wednesday', 'start': '18:00', 'end': '19:00', 'subj': 'Maths', 'year': 'Year 7', 'desc': 'Year 7 Maths' },
         # Thursday
-        { 'trainer_key': 'stephen', 'day': 'Thursday', 'start': '16:30', 'end': '18:00', 'subj': 'English', 'year': 'Year 4', 'desc': 'year 4 english' },
-        { 'trainer_key': 'stephen', 'day': 'Thursday', 'start': '18:00', 'end': '19:00', 'subj': 'English', 'year': 'Year 7', 'desc': 'year 7 english' },
+        { 'trainer_key': 'stephen', 'day': 'Thursday', 'start': '16:30', 'end': '18:00', 'subj': 'English', 'year': 'Year 4', 'desc': 'Year 4 English' },
+        { 'trainer_key': 'stephen', 'day': 'Thursday', 'start': '18:00', 'end': '19:00', 'subj': 'Maths', 'year': 'Year 7', 'desc': 'Year 7 Maths' },
         # Friday
-        { 'trainer_key': 'stephen', 'day': 'Friday', 'start': '16:30', 'end': '18:00', 'subj': 'Physics', 'year': 'Year 8', 'desc': 'Year 8(1:2) - Physics' },
+        { 'trainer_key': 'stephen', 'day': 'Friday', 'start': '16:30', 'end': '18:00', 'subj': 'Physics', 'year': 'Year 8', 'desc': 'Year 8 Physics' },
         # Saturday
-        { 'trainer_key': 'stephen', 'day': 'Saturday', 'start': '16:30', 'end': '18:00', 'subj': 'Chemistry', 'year': 'Year 8', 'desc': 'year 8(1:2) - Chemistry' },
-        { 'trainer_key': 'stephen', 'day': 'Saturday', 'start': '08:30', 'end': '10:00', 'subj': 'Physics', 'year': 'Year 12', 'desc': 'year 12 physics' },
-        { 'trainer_key': 'stephen', 'day': 'Saturday', 'start': '10:00', 'end': '11:00', 'subj': 'Maths', 'year': 'Year 4', 'desc': 'year 4 maths' },
+        { 'trainer_key': 'stephen', 'day': 'Saturday', 'start': '08:30', 'end': '10:00', 'subj': 'Physics', 'year': 'Year 12', 'desc': 'Year 12 Physics' },
+        { 'trainer_key': 'stephen', 'day': 'Saturday', 'start': '10:00', 'end': '11:00', 'subj': 'Maths', 'year': 'Year 4', 'desc': 'Year 4 Maths' },
         # Sunday
-        { 'trainer_key': 'stephen', 'day': 'Sunday', 'start': '11:00', 'end': '12:00', 'subj': 'Maths', 'year': 'Year 4', 'desc': 'year 4 maths' }
+        { 'trainer_key': 'stephen', 'day': 'Sunday', 'start': '11:00', 'end': '12:00', 'subj': 'Maths', 'year': 'Year 4', 'desc': 'Year 4 Maths' }
     ]
 
     for slot in schedules_data:
